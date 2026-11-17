@@ -2,436 +2,589 @@
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;800&family=Caveat:wght@700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600&family=Caveat:wght@700&display=swap">
 <style>
-/* Layout: Paola Lozano Studio moodboard look. One column; a colour-block score card, week strip, checklist grouped by
-   moment of day, then a goals ledger (diario / mensual / trimestral / anual) per category. Two tabs: Rutina, Finanzas. */
+/* Layout: editorial single column, 720px measure. Hairline rules instead of boxes, serif numerals, one accent (Tierra)
+   from the Paola Lozano Studio moodboard. Four tabs: Rutina · Finanzas · Gastos · Ingreso extra. */
 :root {
-  --bg: #F1EDE2;          /* Lienzo */
-  --surface: #FBF8F1;
+  --bg: #F7F4EE;
   --ink: #2A1A1C;
-  --cacao: #3B2418;       /* Cacao · texto */
-  --muted: #6A5552;
-  --line: #D9CFBE;
-  --sun: #F2B92E;         /* Amarillo sol */
-  --peach: #F2A58E;       /* Durazno */
-  --earth: #A65430;       /* Tierra */
-  --wine: #4A1220;
-  --on-color: #F8F4EA;
-  --heat-0: #E4DCCB; --heat-1: #F5D58A; --heat-2: #F2B92E; --heat-3: #D9822B; --heat-4: #A65430;
-  --font-display: "Instrument Serif", Georgia, "Times New Roman", serif;
-  --font-body: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
-  --font-hand: "Caveat", "Segoe Print", cursive;
+  --muted: #7A6764;
+  --line: #E3DACC;
+  --rule: #2A1A1C;
+  --accent: #A65430;       /* Tierra */
+  --soft: #F2A58E;         /* Durazno */
+  --wash: #EFE9DE;
+  --on-accent: #F8F4EA;
+  --heat-0: #E9E2D5; --heat-1: #E8C4AF; --heat-2: #D99877; --heat-3: #BF7149; --heat-4: #A65430;
+  --serif: "Instrument Serif", Georgia, "Times New Roman", serif;
+  --sans: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --hand: "Caveat", "Segoe Print", cursive;
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --bg: #1E1516; --surface: #2A1E1F; --ink: #F1EDE2; --cacao: #EBDCC8; --muted: #B9A79F;
-    --line: #4A3837; --sun: #F2B92E; --peach: #F2A58E; --earth: #E0875B; --wine: #F2A58E; --on-color: #F8F4EA;
-    --heat-0: #352828; --heat-1: #6B4A22; --heat-2: #A8762A; --heat-3: #D9922F; --heat-4: #F2B92E;
+    --bg: #181213; --ink: #F1EDE2; --muted: #A8968F; --line: #352A29; --rule: #F1EDE2;
+    --accent: #E0875B; --soft: #B8735A; --wash: #221A1A; --on-accent: #181213;
+    --heat-0: #2A2020; --heat-1: #5A3527; --heat-2: #8A4D33; --heat-3: #B9683F; --heat-4: #E0875B;
     color-scheme: dark;
   }
 }
 :root[data-theme="dark"] {
-  --bg: #1E1516; --surface: #2A1E1F; --ink: #F1EDE2; --cacao: #EBDCC8; --muted: #B9A79F;
-  --line: #4A3837; --sun: #F2B92E; --peach: #F2A58E; --earth: #E0875B; --wine: #F2A58E; --on-color: #F8F4EA;
-  --heat-0: #352828; --heat-1: #6B4A22; --heat-2: #A8762A; --heat-3: #D9922F; --heat-4: #F2B92E;
+  --bg: #181213; --ink: #F1EDE2; --muted: #A8968F; --line: #352A29; --rule: #F1EDE2;
+  --accent: #E0875B; --soft: #B8735A; --wash: #221A1A; --on-accent: #181213;
+  --heat-0: #2A2020; --heat-1: #5A3527; --heat-2: #8A4D33; --heat-3: #B9683F; --heat-4: #E0875B;
   color-scheme: dark;
 }
 * { box-sizing: border-box; }
-body { background: var(--bg); color: var(--ink); font-family: var(--font-body); font-size: 15px; line-height: 1.5; }
+[hidden] { display: none !important; }
+body { background: var(--bg); color: var(--ink); font-family: var(--sans); font-size: 15px; line-height: 1.55; -webkit-font-smoothing: antialiased; }
 .wrap {
-  max-width: 820px; margin: 0 auto;
-  padding-block: 32px 72px;
-  padding-left: max(16px, env(safe-area-inset-left, 0px));
-  padding-right: max(16px, env(safe-area-inset-right, 0px));
-  display: flex; flex-direction: column; gap: 32px;
+  max-width: 720px; margin: 0 auto;
+  padding-block: 48px 96px;
+  padding-left: max(20px, env(safe-area-inset-left, 0px));
+  padding-right: max(20px, env(safe-area-inset-right, 0px));
+  display: flex; flex-direction: column; gap: 56px;
 }
-h1, h2, h3 { font-family: var(--font-display); font-weight: 400; text-wrap: balance; margin: 0; color: var(--cacao); }
-h1 { font-size: clamp(44px, 9vw, 76px); line-height: 1; letter-spacing: -0.01em; }
-h2 { font-size: clamp(28px, 5vw, 36px); line-height: 1.05; }
-h3 { font-size: 26px; line-height: 1.1; }
+h1, h2, h3 { font-family: var(--serif); font-weight: 400; text-wrap: balance; margin: 0; }
+h1 { font-size: clamp(52px, 11vw, 88px); line-height: .95; letter-spacing: -0.015em; }
+h2 { font-size: clamp(30px, 6vw, 40px); line-height: 1.05; }
+h3 { font-size: 24px; line-height: 1.15; }
 em { font-style: italic; }
-.label { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.16em; color: var(--cacao); }
+p { margin: 0; }
+.label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.18em; color: var(--muted); }
 .num { font-variant-numeric: tabular-nums; }
-.hand { font-family: var(--font-hand); font-weight: 700; color: var(--earth); }
-button { font: inherit; color: inherit; cursor: pointer; }
-button:focus-visible, input:focus-visible, select:focus-visible, a:focus-visible { outline: 2px solid var(--earth); outline-offset: 2px; }
-section { display: flex; flex-direction: column; gap: 14px; }
+.muted { color: var(--muted); }
+.lede { font-size: 17px; color: var(--muted); max-width: 54ch; }
+.hand { font-family: var(--hand); color: var(--accent); }
+button { font: inherit; color: inherit; cursor: pointer; background: none; border: none; padding: 0; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+section { display: flex; flex-direction: column; gap: 20px; }
+.view { display: flex; flex-direction: column; gap: 56px; }
+.shead { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; flex-wrap: wrap; border-bottom: 1px solid var(--rule); padding-bottom: 10px; }
+.link { color: var(--accent); font-size: 14px; font-weight: 500; text-decoration: underline; text-underline-offset: 4px; text-decoration-thickness: 1px; }
 
-/* Header */
+/* Header + tabs */
+header { display: flex; flex-direction: column; gap: 22px; }
 .topline { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
-header { display: flex; flex-direction: column; gap: 18px; }
-header p { margin: 0; max-width: 56ch; color: var(--muted); font-size: 16px; }
-.sync { font-size: 12px; color: var(--muted); display: inline-flex; align-items: center; gap: 6px; }
-.sync::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--muted); }
-.sync.ok::before { background: var(--earth); }
+.sync { font-size: 12px; color: var(--muted); }
+.tabs { display: flex; gap: 28px; overflow-x: auto; scrollbar-width: none; border-top: 1px solid var(--line); padding-top: 4px; }
+.tabs::-webkit-scrollbar { display: none; }
+.tab { padding: 12px 0; min-height: 44px; font-size: 14px; color: var(--muted); white-space: nowrap; border-bottom: 1px solid transparent; }
+.tab[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--ink); }
 
-/* Tabs */
-.tabs { display: flex; gap: 0; border-bottom: 1px solid var(--cacao); }
-.tab {
-  background: none; border: none; padding: 10px 18px 12px; font-size: 13px; font-weight: 600; letter-spacing: 0.14em;
-  text-transform: uppercase; color: var(--muted); border-bottom: 3px solid transparent; margin-bottom: -1px; min-height: 44px;
-}
-.tab[aria-selected="true"] { color: var(--cacao); border-bottom-color: var(--earth); }
+/* Score line */
+.score { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border-top: 1px solid var(--rule); border-bottom: 1px solid var(--line); }
+.score > div { padding: 18px 16px 18px 0; display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.score > div + div { padding-left: 16px; border-left: 1px solid var(--line); }
+.score b { font-family: var(--serif); font-weight: 400; font-size: clamp(30px, 6vw, 44px); line-height: 1; overflow-wrap: anywhere; }
+.progress { height: 2px; background: var(--line); }
+.progress i { display: block; height: 100%; background: var(--accent); transition: width .4s ease; }
+.compound { font-family: var(--serif); font-size: 21px; line-height: 1.35; max-width: 40ch; }
+.compound strong { font-weight: 400; color: var(--accent); }
 
-/* Score block (moodboard colour tile) */
-.score {
-  border-radius: 4px; padding: 28px; display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 20px 32px; align-items: center;
-  background: var(--sun); color: #2A1A1C;
-}
-.score.fin { background: var(--earth); color: #F8F4EA; }
-.ring { position: relative; width: 120px; height: 120px; }
-.ring svg { width: 100%; height: 100%; transform: rotate(-90deg); }
-.ring .track { stroke: currentColor; opacity: .18; }
-.ring .fill { stroke: currentColor; transition: stroke-dashoffset .4s ease; }
-.ring .lbl { position: absolute; inset: 0; display: grid; place-content: center; text-align: center; }
-.ring .pct { font-family: var(--font-display); font-size: 40px; line-height: 1; }
-.ring .of { font-size: 12px; opacity: .8; }
-.stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
-.stat { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
-.stat b { font-family: var(--font-display); font-weight: 400; font-size: 34px; line-height: 1; }
-.stat span { font-size: 12px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; opacity: .85; }
-.compound { grid-column: 1 / -1; font-size: 14px; border-top: 1px solid currentColor; padding-top: 14px; }
-.compound strong { font-weight: 800; }
-
-/* Week strip */
-.datehead { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; }
-.linkbtn { background: none; border: none; padding: 0; color: var(--earth); font-weight: 600; font-size: 14px; text-decoration: underline; text-underline-offset: 3px; }
-.week { display: grid; grid-template-columns: auto repeat(7, minmax(0, 1fr)) auto; gap: 6px; }
-.nav { background: none; border: 1px solid var(--line); border-radius: 4px; width: 36px; color: var(--cacao); font-size: 18px; }
-.nav:disabled { opacity: .3; cursor: default; }
-.day { border: 1px solid var(--line); background: var(--surface); border-radius: 4px; padding: 8px 2px 7px; display: flex; flex-direction: column; align-items: center; gap: 4px; min-width: 0; min-height: 64px; }
-.day .dname { font-size: 11px; text-transform: uppercase; letter-spacing: .1em; color: var(--muted); }
-.day .dnum { font-family: var(--font-display); font-size: 22px; line-height: 1; }
-.day .bar { width: 70%; height: 4px; border-radius: 2px; background: var(--line); overflow: hidden; }
-.day .bar i { display: block; height: 100%; background: var(--earth); }
-.day.sel { border-color: var(--cacao); box-shadow: inset 0 0 0 1px var(--cacao); }
-.day.today .dname { color: var(--earth); font-weight: 700; }
+/* Day line */
+.week { display: grid; grid-template-columns: 28px repeat(7, minmax(0, 1fr)) 28px; align-items: stretch; }
+.nav { color: var(--muted); font-size: 20px; }
+.nav:disabled { opacity: .25; cursor: default; }
+.day { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 6px 0 10px; min-height: 64px; border-bottom: 1px solid var(--line); min-width: 0; }
+.day .dn { font-size: 11px; text-transform: uppercase; letter-spacing: .12em; color: var(--muted); }
+.day .dd { font-family: var(--serif); font-size: 24px; line-height: 1; }
+.day .dx { font-size: 10px; color: var(--muted); height: 12px; line-height: 12px; white-space: nowrap; }
+.day .bar { width: 22px; height: 2px; background: var(--line); }
+.day .bar i { display: block; height: 100%; background: var(--accent); }
+.day.sel { border-bottom: 2px solid var(--ink); }
+.day.today .dn { color: var(--accent); }
 
 /* Checklist */
-.groups { display: flex; flex-direction: column; gap: 24px; }
-.ghead { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; border-bottom: 1px solid var(--cacao); padding-bottom: 6px; }
-.list { display: flex; flex-direction: column; }
-.habit { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 14px; align-items: center; padding: 14px 2px; border-bottom: 1px solid var(--line); }
-.check { width: 32px; height: 32px; border-radius: 4px; border: 1.5px solid var(--cacao); background: transparent; display: grid; place-content: center; padding: 0; transition: background .15s; }
-.check svg { width: 18px; height: 18px; opacity: 0; transform: scale(.6); transition: .15s; color: var(--on-color); }
-.habit.done .check { background: var(--earth); border-color: var(--earth); }
-.habit.done .check svg { opacity: 1; transform: none; }
-.habit.done .hname { color: var(--muted); text-decoration: line-through; text-decoration-color: var(--peach); text-decoration-thickness: 2px; }
-.hbody { min-width: 0; display: flex; flex-direction: column; gap: 2px; }
-.hname { font-weight: 600; font-size: 16px; }
-.who { font-size: 13px; color: var(--muted); background: none; border: none; padding: 0; text-align: left; }
-.who:hover { color: var(--cacao); }
-.quote { font-family: var(--font-display); font-size: 19px; line-height: 1.3; color: var(--cacao); margin-top: 6px; }
-.hmeta { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; }
-.streak { font-size: 13px; color: var(--muted); white-space: nowrap; }
-.streak.hot { color: var(--earth); font-weight: 700; }
-.dots { display: flex; gap: 3px; }
-.dots i { width: 7px; height: 7px; border-radius: 1px; background: var(--line); }
-.dots i.on { background: var(--earth); }
+.group { display: flex; flex-direction: column; }
+.ghead { display: flex; justify-content: space-between; align-items: baseline; padding-bottom: 8px; border-bottom: 1px solid var(--rule); }
+.habit { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 16px; align-items: start; padding: 16px 0; border-bottom: 1px solid var(--line); }
+.check { width: 26px; height: 26px; border-radius: 50%; border: 1px solid var(--ink); display: grid; place-content: center; margin-top: 1px; transition: background .15s; }
+.check svg { width: 14px; height: 14px; opacity: 0; color: var(--on-accent); transition: opacity .15s; }
+.habit.done .check { background: var(--accent); border-color: var(--accent); }
+.habit.done .check svg { opacity: 1; }
+.habit.done .hname { color: var(--muted); }
+.hbody { min-width: 0; display: flex; flex-direction: column; gap: 3px; }
+.hname { font-size: 16px; }
+.hsub { display: flex; gap: 14px; flex-wrap: wrap; align-items: baseline; }
+.who { font-size: 13px; color: var(--muted); text-align: left; }
+.who:hover { color: var(--ink); }
+.quote { font-family: var(--serif); font-style: italic; font-size: 19px; line-height: 1.35; margin-top: 8px; max-width: 46ch; }
+.streak { font-size: 12px; color: var(--muted); white-space: nowrap; padding-top: 4px; }
+.streak.hot { color: var(--accent); }
 
 /* Goals ledger */
-.goals { display: flex; flex-direction: column; gap: 28px; }
-.gcat { display: flex; flex-direction: column; gap: 10px; }
-.gcat .why { margin: 0; color: var(--muted); max-width: 60ch; }
-.ledger { border: 1px solid var(--cacao); border-radius: 4px; background: var(--surface); }
-.lrow { display: grid; grid-template-columns: minmax(0, 1.4fr) repeat(4, minmax(0, 1fr)); gap: 12px; padding: 12px 16px; border-top: 1px solid var(--line); align-items: start; }
-.lrow:first-child { border-top: none; }
-.lrow.head { background: var(--bg); border-radius: 4px 4px 0 0; padding-block: 10px; }
-.lrow.head span { font-size: 11px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--cacao); }
-.lname { font-weight: 600; font-size: 14px; min-width: 0; }
-.cell { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
-.cell .meta { font-family: var(--font-display); font-size: 20px; line-height: 1.1; color: var(--cacao); overflow-wrap: anywhere; }
-.cell .sub { font-size: 12px; color: var(--muted); overflow-wrap: anywhere; }
-.cell .got { font-size: 12px; color: var(--earth); font-weight: 600; }
-.cell .mlabel { display: none; }
-.total { font-size: 14px; color: var(--muted); }
-.total b { color: var(--cacao); }
+.ledger { display: flex; flex-direction: column; }
+.lrow { display: grid; grid-template-columns: minmax(0, 1.5fr) repeat(4, minmax(0, 1fr)); gap: 12px; padding: 14px 0; border-bottom: 1px solid var(--line); align-items: baseline; }
+.lrow.head { border-bottom: 1px solid var(--rule); padding: 8px 0; }
+.lname { font-size: 14px; min-width: 0; }
+.cell { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
+.cell .v { font-family: var(--serif); font-size: 19px; line-height: 1.15; overflow-wrap: anywhere; }
+.cell .s { font-size: 11px; color: var(--muted); overflow-wrap: anywhere; }
+.cell .g { font-size: 11px; color: var(--accent); }
+.cell .ml { display: none; }
 
-/* Finance settings + projection */
-.fin-settings { display: flex; flex-wrap: wrap; gap: 12px; align-items: end; }
-.field { display: flex; flex-direction: column; gap: 4px; }
-.field label { font-size: 11px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--cacao); }
-.field input, .field select, .addform input, .addform select {
-  font: inherit; color: var(--ink); background: var(--surface); border: 1px solid var(--cacao); border-radius: 4px; padding: 9px 12px; min-height: 44px;
+/* Forms */
+.field { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.field label { font-size: 11px; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); }
+input, select, textarea {
+  font: inherit; color: var(--ink); background: transparent; border: none; border-bottom: 1px solid var(--ink);
+  border-radius: 0; padding: 8px 0; min-height: 44px; width: 100%;
 }
-.field input { width: 140px; }
-.proj { display: grid; gap: 10px; }
-.prow { display: grid; grid-template-columns: 70px minmax(0, 1fr) auto; gap: 12px; align-items: center; }
-.prow .yr { font-size: 13px; font-weight: 600; color: var(--cacao); }
-.prow .track { height: 26px; background: var(--heat-0); border-radius: 2px; overflow: hidden; display: flex; }
-.prow .dep { background: var(--peach); }
-.prow .gain { background: var(--earth); }
-.prow .v { font-family: var(--font-display); font-size: 20px; color: var(--cacao); white-space: nowrap; }
-.plegend { display: flex; gap: 16px; font-size: 12px; color: var(--muted); flex-wrap: wrap; }
-.plegend i { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 6px; vertical-align: -1px; }
+textarea { border: 1px solid var(--line); padding: 14px; min-height: 110px; resize: vertical; font-family: var(--serif); font-size: 19px; line-height: 1.4; }
+select { cursor: pointer; }
+.row { display: grid; gap: 20px; align-items: end; }
+.btn { min-height: 44px; padding: 0 22px; background: var(--ink); color: var(--bg); font-size: 14px; font-weight: 500; }
+.btn.line { background: transparent; color: var(--ink); border: 1px solid var(--ink); }
+.seg { display: flex; border: 1px solid var(--ink); }
+.seg button { flex: 1; min-height: 42px; padding: 0 14px; font-size: 14px; }
+.seg button[aria-pressed="true"] { background: var(--ink); color: var(--bg); }
+
+/* Expense list */
+.items { display: flex; flex-direction: column; }
+.item { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; gap: 16px; align-items: baseline; padding: 14px 0; border-bottom: 1px solid var(--line); }
+.item .what { min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.item .what span:first-child { font-size: 16px; overflow-wrap: anywhere; }
+.item .amt { font-family: var(--serif); font-size: 22px; white-space: nowrap; }
+.x { width: 32px; height: 32px; color: var(--muted); font-size: 20px; line-height: 1; }
+.x:hover { color: var(--accent); }
+.tag { font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+.tag.want { color: var(--accent); }
+.daytotal { display: flex; justify-content: space-between; align-items: baseline; padding-top: 14px; }
+.daytotal b { font-family: var(--serif); font-weight: 400; font-size: 30px; }
+.split { display: flex; height: 6px; background: var(--line); }
+.split i:first-child { background: var(--ink); }
+.split i:last-child { background: var(--soft); }
+.cats { display: flex; flex-direction: column; }
+.crow { display: grid; grid-template-columns: minmax(0, 150px) minmax(0, 1fr) auto; gap: 16px; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--line); }
+.crow .cb { height: 2px; background: var(--line); }
+.crow .cb i { display: block; height: 100%; background: var(--accent); }
+.crow .ca { font-family: var(--serif); font-size: 19px; white-space: nowrap; }
+.kpis { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border-top: 1px solid var(--rule); border-bottom: 1px solid var(--line); }
+.kpis > div { padding: 16px 16px 16px 0; display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.kpis > div + div { padding-left: 16px; border-left: 1px solid var(--line); }
+.kpis b { font-family: var(--serif); font-weight: 400; font-size: clamp(24px, 5vw, 34px); line-height: 1.05; overflow-wrap: anywhere; }
+
+/* Savings projection */
+.proj { display: flex; flex-direction: column; }
+.prow { display: grid; grid-template-columns: 64px minmax(0, 1fr) auto; gap: 16px; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--line); }
+.prow .track { height: 6px; display: flex; background: var(--wash); }
+.prow .dep { background: var(--soft); }
+.prow .gain { background: var(--accent); }
+.prow .v { font-family: var(--serif); font-size: 20px; white-space: nowrap; }
+.legend { display: flex; gap: 18px; flex-wrap: wrap; font-size: 12px; color: var(--muted); align-items: center; }
+.legend i { display: inline-block; width: 10px; height: 10px; margin-right: 6px; vertical-align: -1px; }
+
+/* Side income */
+.paths { display: flex; flex-direction: column; border-top: 1px solid var(--rule); }
+.path { border-bottom: 1px solid var(--line); }
+.path > button { width: 100%; display: grid; grid-template-columns: 32px minmax(0, 1fr) auto; gap: 12px; align-items: baseline; padding: 18px 0; text-align: left; }
+.path .pn { font-size: 12px; color: var(--muted); }
+.path .pt { font-family: var(--serif); font-size: 24px; line-height: 1.15; }
+.path .pl { display: block; font-family: var(--sans); font-size: 14px; color: var(--muted); margin-top: 4px; }
+.path .pick { font-size: 12px; color: var(--muted); white-space: nowrap; }
+.path.on .pick { color: var(--accent); }
+.pdetail { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px 32px; padding: 0 0 24px 44px; }
+.pdetail div { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.pdetail p { font-size: 14px; }
+.rhythm { display: flex; flex-direction: column; border-top: 1px solid var(--rule); }
+.rrow { display: grid; grid-template-columns: 56px 110px minmax(0, 1fr); gap: 16px; padding: 14px 0; border-bottom: 1px solid var(--line); align-items: baseline; }
+.rrow .rd { font-size: 12px; text-transform: uppercase; letter-spacing: .12em; color: var(--muted); }
+.rrow .rv { font-family: var(--serif); font-size: 22px; }
+.rrow p { font-size: 14px; color: var(--muted); }
+.rrow.now .rd, .rrow.now .rv { color: var(--accent); }
+.phase { display: flex; flex-direction: column; }
+.phase h3 { padding-bottom: 8px; border-bottom: 1px solid var(--rule); display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+.ms { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 14px; align-items: start; padding: 12px 0; border-bottom: 1px solid var(--line); width: 100%; text-align: left; }
+.ms .check { width: 22px; height: 22px; }
+.ms.done .check { background: var(--accent); border-color: var(--accent); }
+.ms.done .check svg { opacity: 1; }
+.ms.done span:last-child { color: var(--muted); text-decoration: line-through; text-decoration-color: var(--line); }
+.notes { display: flex; flex-direction: column; }
+.note { display: grid; grid-template-columns: 90px minmax(0, 1fr); gap: 16px; padding: 12px 0; border-bottom: 1px solid var(--line); }
+.note p { font-family: var(--serif); font-size: 18px; line-height: 1.35; overflow-wrap: anywhere; }
+.saved { font-size: 12px; color: var(--muted); min-height: 18px; }
 
 /* Heatmap */
 .heatwrap { overflow-x: auto; }
-.heat { display: grid; grid-auto-flow: column; grid-template-rows: repeat(7, 14px); gap: 3px; width: max-content; }
-.heat i { width: 14px; height: 14px; border-radius: 2px; background: var(--heat-0); }
+.heat { display: grid; grid-auto-flow: column; grid-template-rows: repeat(7, 12px); gap: 3px; width: max-content; }
+.heat i { width: 12px; height: 12px; background: var(--heat-0); }
 .heat i.l1 { background: var(--heat-1); } .heat i.l2 { background: var(--heat-2); }
 .heat i.l3 { background: var(--heat-3); } .heat i.l4 { background: var(--heat-4); }
 .heat i.future { background: transparent; }
-.legend { display: flex; align-items: center; gap: 4px; font-size: 12px; color: var(--muted); }
-.legend i { width: 12px; height: 12px; border-radius: 2px; display: inline-block; }
+.hlegend { display: flex; align-items: center; gap: 3px; font-size: 12px; color: var(--muted); }
+.hlegend i { width: 10px; height: 10px; display: inline-block; }
 
 /* Editor */
-.editor { border: 1px solid var(--cacao); border-radius: 4px; padding: 18px; display: flex; flex-direction: column; gap: 16px; background: var(--surface); }
-.addform { display: flex; flex-wrap: wrap; gap: 8px; }
-.addform input { flex: 1 1 220px; min-width: 0; }
-.btn { border: none; border-radius: 4px; padding: 9px 18px; min-height: 44px; font-weight: 600; background: var(--cacao); color: var(--bg); }
-.btn.ghost { background: transparent; border: 1px solid var(--line); color: var(--ink); }
-.btn.danger { background: var(--earth); color: var(--on-color); }
-.erow { display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 6px 0; border-top: 1px solid var(--line); }
-.erow:first-child { border-top: none; }
+.erow { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 8px 0; border-bottom: 1px solid var(--line); }
 .erow span { min-width: 0; }
-.erow small { color: var(--muted); }
-.suggest { display: flex; flex-wrap: wrap; gap: 8px; }
-.chip { border: 1px dashed var(--cacao); background: transparent; border-radius: 999px; padding: 8px 14px; font-size: 13px; min-height: 40px; }
-.chip:hover { background: var(--sun); color: #2A1A1C; }
-.empty { padding: 24px 0; color: var(--muted); }
-footer { font-size: 12px; color: var(--muted); border-top: 1px solid var(--line); padding-top: 16px; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip { border: 1px solid var(--line); padding: 8px 14px; font-size: 13px; min-height: 40px; }
+.chip:hover { border-color: var(--ink); }
+.empty { padding: 20px 0; color: var(--muted); font-family: var(--serif); font-style: italic; font-size: 19px; }
+footer { font-size: 12px; color: var(--muted); border-top: 1px solid var(--line); padding-top: 16px; max-width: 60ch; }
 
+@media (min-width: 601px) {
+  .row.r-exp { grid-template-columns: 1fr 1.2fr 1.6fr; }
+  .row.r-exp .seg { grid-column: 1 / 3; }
+  .row.r-fin { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .row.r-inc { grid-template-columns: 1fr 2fr auto; }
+  .row.r-add { grid-template-columns: 2fr 1fr auto; }
+}
 @media (max-width: 600px) {
-  .score { grid-template-columns: 1fr; justify-items: center; text-align: center; padding: 22px; }
-  .stats { width: 100%; }
-  .stat { align-items: center; }
-  .stat b { font-size: 28px; }
-  .week { gap: 3px; }
-  .nav { width: 26px; }
-  .day .dnum { font-size: 19px; }
-  .habit { gap: 10px; }
-  .dots { display: none; }
+  .wrap { padding-block: 32px 72px; gap: 44px; }
+  .view { gap: 44px; }
+  .score { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .score > div:nth-child(3) { padding-left: 0; border-left: none; }
+  .score > div:nth-child(n+3) { border-top: 1px solid var(--line); }
+  .week { grid-template-columns: 22px repeat(7, minmax(0, 1fr)) 22px; }
+  .day .dd { font-size: 20px; }
   .lrow.head { display: none; }
-  .lrow { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px 14px; }
+  .lrow { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px 16px; }
   .lname { grid-column: 1 / -1; font-size: 15px; }
-  .cell .mlabel { display: block; font-size: 10px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+  .cell .ml { display: block; font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+  .row.r-exp, .row.r-inc { grid-template-columns: 1fr 1fr; }
+  .row.r-exp .full, .row.r-inc .full { grid-column: 1 / -1; }
+  .row.r-fin { grid-template-columns: 1fr 1fr; }
+  .crow { grid-template-columns: minmax(0, 1fr) auto; }
+  .crow .cb { grid-column: 1 / -1; grid-row: 2; }
+  .kpis b { font-size: 24px; }
   .prow { grid-template-columns: 52px minmax(0, 1fr); }
-  .prow .v { grid-column: 2; font-size: 17px; }
+  .prow .v { grid-column: 2; font-size: 18px; }
+  .pdetail { grid-template-columns: 1fr; padding-left: 0; }
+  .rrow { grid-template-columns: 44px minmax(0, 1fr); }
+  .rrow p { grid-column: 2; }
+  .note { grid-template-columns: 1fr; gap: 4px; }
 }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
 </style>
 
 <div class="wrap">
   <header>
-    <div class="topline"><span class="label">Paola Lozano Studio · Rutina</span><span class="sync" id="sync">Cargando…</span></div>
+    <div class="topline"><span class="label">Paola Lozano Studio</span><span class="sync" id="sync">Cargando…</span></div>
     <h1>Hábitos <em>compuestos</em></h1>
-    <p>Las rutinas de Buffett, Gates, Bezos, Oprah y Dalio, y los hábitos de dinero de Rockefeller, Munger y Clason. Márcalos cada día y mira en qué se convierten en un mes, un trimestre y un año.</p>
+    <p class="lede">Pequeñas acciones diarias, tomadas de quienes construyeron grandes vidas y fortunas. Márcalas cada día y mira en qué se convierten.</p>
     <nav class="tabs" role="tablist" aria-label="Secciones">
-      <button class="tab" role="tab" id="tab-rutina" data-tab="rutina" aria-controls="view">Rutina de éxito</button>
-      <button class="tab" role="tab" id="tab-finanzas" data-tab="finanzas" aria-controls="view">Finanzas personales</button>
+      <button class="tab" role="tab" id="tab-rutina" data-tab="rutina">Rutina</button>
+      <button class="tab" role="tab" id="tab-finanzas" data-tab="finanzas">Finanzas</button>
+      <button class="tab" role="tab" id="tab-gastos" data-tab="gastos">Gastos</button>
+      <button class="tab" role="tab" id="tab-ingreso" data-tab="ingreso">Ingreso extra</button>
     </nav>
   </header>
 
-  <div id="view" role="tabpanel" style="display:flex;flex-direction:column;gap:32px">
-    <section class="score" id="score" aria-label="Resumen del día">
-      <div class="ring">
-        <svg viewBox="0 0 120 120" aria-hidden="true">
-          <circle class="track" cx="60" cy="60" r="52" fill="none" stroke-width="10"></circle>
-          <circle class="fill" id="ringFill" cx="60" cy="60" r="52" fill="none" stroke-width="10" stroke-linecap="round" stroke-dasharray="326.73" stroke-dashoffset="326.73"></circle>
-        </svg>
-        <div class="lbl"><span class="pct num" id="pct">0%</span><span class="of" id="of">0 de 0</span></div>
-      </div>
-      <div class="stats">
-        <div class="stat"><b class="num" id="sStreak">0</b><span>días seguidos ≥ 80%</span></div>
-        <div class="stat"><b class="num" id="sWeek">0%</b><span>últimos 7 días</span></div>
-        <div class="stat"><b class="num" id="sTotal">0</b><span id="sTotalLbl">hábitos cumplidos</span></div>
-      </div>
-      <div class="compound" id="compound"></div>
-    </section>
-
-    <section aria-label="Semana">
-      <div class="datehead"><h2 id="dateTitle">Hoy</h2><button class="linkbtn" id="goToday" hidden>Volver a hoy</button></div>
+  <main class="view" id="main" role="tabpanel">
+    <!-- Day line: shared by every tab -->
+    <section aria-label="Día">
+      <div class="shead"><h2 id="dateTitle">Hoy</h2><button class="link" id="goToday" hidden>Volver a hoy</button></div>
       <div class="week" id="week"></div>
     </section>
 
-    <section class="groups" id="groups" aria-label="Hábitos"></section>
+    <!-- Rutina + Finanzas -->
+    <div class="view" id="vHabits">
+      <section aria-label="Resumen">
+        <div class="score">
+          <div><span class="label">Hoy</span><b class="num" id="sToday">0/0</b></div>
+          <div><span class="label">Racha ≥ 80%</span><b class="num" id="sStreak">0</b></div>
+          <div><span class="label">7 días</span><b class="num" id="sWeek">0%</b></div>
+          <div><span class="label" id="sTotalLbl">Total</span><b class="num" id="sTotal">0</b></div>
+        </div>
+        <div class="progress" aria-hidden="true"><i id="prog" style="width:0"></i></div>
+        <p class="compound" id="compound"></p>
+      </section>
+      <section id="groups" aria-label="Hábitos" style="gap:40px"></section>
 
-    <section id="finBox" aria-label="Tu ahorro">
-      <div class="datehead"><h2>Tu <em>ahorro</em> diario</h2><span class="hand" style="font-size:28px">págate primero</span></div>
-      <div class="fin-settings">
-        <div class="field"><label for="finDaily">Monto por día</label><input id="finDaily" type="number" min="0" step="any" inputmode="decimal"></div>
-        <div class="field"><label for="finCur">Moneda</label>
-          <select id="finCur"><option>USD</option><option>COP</option><option>MXN</option><option>EUR</option><option>ARS</option><option>CLP</option><option>PEN</option></select></div>
-        <div class="field"><label for="finRate">Rendimiento anual %</label><input id="finRate" type="number" min="0" max="30" step="0.5" inputmode="decimal"></div>
-      </div>
-      <p class="total" id="finNote" style="margin:0"></p>
-      <div class="proj" id="proj"></div>
-      <div class="plegend"><span><i style="background:var(--peach)"></i>Lo que aportas</span><span><i style="background:var(--earth)"></i>Lo que genera el interés compuesto</span></div>
-    </section>
+      <section id="finBox" aria-label="Ahorro">
+        <div class="shead"><h2>Tu <em>ahorro</em></h2><span class="hand" style="font-size:26px">págate primero</span></div>
+        <div class="row r-fin">
+          <div class="field"><label for="finDaily">Monto por día</label><input id="finDaily" type="number" min="0" step="any" inputmode="decimal"></div>
+          <div class="field"><label for="finCur">Moneda</label><select id="finCur"><option>USD</option><option>COP</option><option>MXN</option><option>EUR</option><option>ARS</option><option>CLP</option><option>PEN</option></select></div>
+          <div class="field"><label for="finRate">Rendimiento anual %</label><input id="finRate" type="number" min="0" max="30" step="0.5" inputmode="decimal"></div>
+        </div>
+        <p class="muted" id="finNote"></p>
+        <div class="proj" id="proj"></div>
+        <div class="legend"><span><i style="background:var(--soft)"></i>Lo que aportas</span><span><i style="background:var(--accent)"></i>Interés compuesto</span></div>
+      </section>
 
-    <section aria-label="Metas">
-      <div class="datehead"><h2>Metas que <em>alcanzas</em></h2><span class="label">Si cumples cada día</span></div>
-      <p class="total" style="margin:0">Cada fila muestra lo que suma el hábito si lo cumples todos los días (mes de 30 días, trimestre de 91, año de 365). Debajo, en color, lo que llevas de verdad en el mes, trimestre y año en curso.</p>
-      <div class="goals" id="goals"></div>
-    </section>
-  </div>
+      <section aria-label="Metas">
+        <div class="shead"><h2>Metas que <em>alcanzas</em></h2><span class="label">Cumpliendo cada día</span></div>
+        <p class="muted">Lo que suma cada hábito en un día, un mes (30), un trimestre (91) y un año (365). En color, lo que llevas en el periodo en curso.</p>
+        <div id="goals" style="display:flex;flex-direction:column;gap:40px"></div>
+      </section>
 
-  <section aria-label="Historial">
-    <h2>Últimas <em>16 semanas</em></h2>
-    <div class="heatwrap"><div class="heat" id="heat"></div></div>
-    <div class="legend">Menos <i style="background:var(--heat-0)"></i><i style="background:var(--heat-1)"></i><i style="background:var(--heat-2)"></i><i style="background:var(--heat-3)"></i><i style="background:var(--heat-4)"></i> Más · todos los hábitos</div>
-  </section>
+      <section id="heatBox" aria-label="Historial">
+        <div class="shead"><h2>Dieciséis <em>semanas</em></h2></div>
+        <div class="heatwrap"><div class="heat" id="heat"></div></div>
+        <div class="hlegend">Menos&nbsp;<i style="background:var(--heat-0)"></i><i style="background:var(--heat-1)"></i><i style="background:var(--heat-2)"></i><i style="background:var(--heat-3)"></i><i style="background:var(--heat-4)"></i>&nbsp;Más</div>
+      </section>
+    </div>
+
+    <!-- Gastos -->
+    <div class="view" id="vGastos">
+      <section aria-label="Registrar gasto">
+        <div class="shead"><h2>Registrar <em>gasto</em></h2><span class="label">Rockefeller · Ledger A</span></div>
+        <p class="muted">Rockefeller anotó cada centavo desde los 16 años. Registra lo que gastas en el momento: monto, en qué y si era necesidad o deseo.</p>
+        <form id="expForm" class="row r-exp" autocomplete="off">
+          <div class="field"><label for="expAmt">Monto</label><input id="expAmt" type="number" min="0" step="any" inputmode="decimal" required placeholder="0"></div>
+          <div class="field"><label for="expCat">Categoría</label><select id="expCat"></select></div>
+          <div class="field full"><label for="expNote">Detalle</label><input id="expNote" maxlength="80" placeholder="Café con Ana"></div>
+          <div class="seg full" role="group" aria-label="Tipo de gasto">
+          <button type="button" data-kind="need" aria-pressed="true">Necesidad</button>
+          <button type="button" data-kind="want" aria-pressed="false">Deseo</button>
+        </div>
+          <button class="btn full" type="submit">Agregar gasto</button>
+        </form>
+      </section>
+
+      <section aria-label="Gastos del día">
+        <div class="shead"><h3 id="expDayTitle">Gastos de hoy</h3><button class="link" id="noSpend">Hoy no gasté nada</button></div>
+        <div class="items" id="expList"></div>
+        <div class="daytotal"><span class="label">Total del día</span><b class="num" id="expDayTotal">0</b></div>
+      </section>
+
+      <section aria-label="Resumen del mes">
+        <div class="shead"><h2 id="expMonthTitle">El <em>mes</em></h2></div>
+        <div class="kpis">
+          <div><span class="label">Gastado</span><b class="num" id="mTotal">0</b></div>
+          <div><span class="label">Promedio diario</span><b class="num" id="mAvg">0</b></div>
+          <div><span class="label">Días registrados</span><b class="num" id="mDays">0</b></div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <div class="split" id="mSplit" aria-hidden="true"><i></i><i></i></div>
+          <div class="legend" id="mSplitLegend"></div>
+        </div>
+        <div class="cats" id="mCats"></div>
+      </section>
+    </div>
+
+    <!-- Ingreso extra -->
+    <div class="view" id="vIngreso">
+      <section aria-label="Introducción">
+        <p class="compound">«Si no encuentras una forma de ganar dinero mientras duermes, trabajarás hasta que mueras.» <span class="muted" style="font-size:15px;font-family:var(--sans)">Warren Buffett</span></p>
+        <p class="muted">Treinta minutos al día son 182 horas al año: suficiente para lanzar algo pequeño y real. La clave es elegir un solo camino, darle a cada día de la semana una tarea y medir.</p>
+      </section>
+
+      <section aria-label="Caminos">
+        <div class="shead"><h2>Elige un <em>camino</em></h2><span class="label">Uno a la vez</span></div>
+        <div class="paths" id="paths"></div>
+      </section>
+
+      <section aria-label="Ritmo semanal">
+        <div class="shead"><h2>Tus 30 minutos, <em>día a día</em></h2></div>
+        <div class="rhythm" id="rhythm"></div>
+      </section>
+
+      <section aria-label="Ruta de 90 días">
+        <div class="shead"><h2>Ruta de <em>90 días</em></h2><span class="label num" id="msCount">0 / 0</span></div>
+        <div id="phases" style="display:flex;flex-direction:column;gap:32px"></div>
+      </section>
+
+      <section aria-label="Bitácora">
+        <div class="shead"><h2>Bitácora</h2><span class="label" id="logDate">Hoy</span></div>
+        <div class="field"><label for="sessNote">¿Qué hiciste en tus 30 minutos?</label>
+          <textarea id="sessNote" maxlength="500" placeholder="Fotografié 4 láminas y escribí la descripción de la tienda."></textarea></div>
+        <span class="saved" id="sessSaved"></span>
+        <div class="notes" id="notes"></div>
+      </section>
+
+      <section aria-label="Ingresos del proyecto">
+        <div class="shead"><h2>Lo que ya <em>generó</em></h2></div>
+        <div class="kpis">
+          <div><span class="label">Este mes</span><b class="num" id="iMonth">0</b></div>
+          <div><span class="label">Total</span><b class="num" id="iTotal">0</b></div>
+          <div><span class="label">Ventas</span><b class="num" id="iCount">0</b></div>
+        </div>
+        <form id="incForm" class="row r-inc" autocomplete="off">
+          <div class="field"><label for="incAmt">Monto</label><input id="incAmt" type="number" min="0" step="any" inputmode="decimal" required placeholder="0"></div>
+          <div class="field"><label for="incNote">Qué vendiste</label><input id="incNote" maxlength="80" placeholder="Lámina A4, taller de acuarela…"></div>
+          <button class="btn full" type="submit">Registrar ingreso</button>
+        </form>
+        <div class="items" id="incList"></div>
+      </section>
+    </div>
+  </main>
 
   <section>
-    <div class="datehead"><h2>Tus <em>hábitos</em></h2><button class="linkbtn" id="toggleEdit">Editar lista</button></div>
-    <div class="editor" id="editor" hidden>
-      <form class="addform" id="addForm">
-        <input id="newName" placeholder="Nuevo hábito, p. ej. Tomar 2 L de agua" maxlength="80" required aria-label="Nombre del hábito">
-        <select id="newCat" aria-label="Categoría">
-          <option value="manana">Mañana</option>
-          <option value="dia">Durante el día</option>
-          <option value="noche">Noche</option>
-          <option value="finanzas">Finanzas</option>
-        </select>
+    <div class="shead"><h2>Tus <em>hábitos</em></h2><button class="link" id="toggleEdit">Editar lista</button></div>
+    <div id="editor" hidden style="display:flex;flex-direction:column;gap:20px">
+      <form class="row r-add" id="addForm">
+        <div class="field"><label for="newName">Nuevo hábito</label><input id="newName" placeholder="Tomar 2 L de agua" maxlength="80" required></div>
+        <div class="field"><label for="newCat">Categoría</label><select id="newCat"><option value="manana">Mañana</option><option value="dia">Durante el día</option><option value="noche">Noche</option><option value="finanzas">Finanzas</option></select></div>
         <button class="btn" type="submit">Agregar</button>
       </form>
-      <div id="suggestBox" style="display:flex;flex-direction:column;gap:8px">
-        <span class="label">Sugerencias que no tienes en tu lista</span>
-        <div class="suggest" id="suggest"></div>
-      </div>
+      <div id="suggestBox" style="display:flex;flex-direction:column;gap:10px"><span class="label">Sugerencias</span><div class="chips" id="suggest"></div></div>
       <div id="elist"></div>
     </div>
   </section>
 
-  <footer>Las referencias resumen hábitos que estas personas han descrito en entrevistas, libros y cartas; son inspiración, no una receta exacta. Las proyecciones de ahorro son ilustrativas: el rendimiento real de una inversión varía y no está garantizado.</footer>
+  <footer>Las referencias resumen hábitos que estas personas han descrito en entrevistas, libros y cartas. Las proyecciones de ahorro son ilustrativas: el rendimiento real de una inversión varía y no está garantizado.</footer>
 </div>
 
 <script>
 (function () {
   "use strict";
 
-  // ---------- Library ----------
-  // metric: amt per check + unit ("min" | "pages" | "count" | "money"); count uses [singular, plural]
+  // ---------- Habit library ----------
   const LIBRARY = [
-    { id: "wake", cat: "manana", name: "Levantarme antes de las 6:00", who: "Tim Cook · Indra Nooyi",
-      quote: "Tim Cook empieza su día cerca de las 4:00 para leer y hacer ejercicio antes de que el mundo despierte.",
-      metric: { amt: 60, unit: "min", note: "de tiempo propio" } },
-    { id: "move", cat: "manana", name: "Ejercicio 30 minutos", who: "Richard Branson",
-      quote: "Branson dice que hacer ejercicio cada mañana le da al menos cuatro horas extra de productividad al día.",
-      metric: { amt: 30, unit: "min", note: "de ejercicio" } },
-    { id: "meditate", cat: "manana", name: "Meditar 15 minutos", who: "Ray Dalio · Oprah",
-      quote: "Ray Dalio medita desde 1969 y la considera la mayor razón de cualquier éxito que haya tenido.",
-      metric: { amt: 15, unit: "min", note: "de meditación" } },
-    { id: "top3", cat: "manana", name: "Definir mis 3 prioridades del día", who: "Jeff Bezos · Warren Buffett",
-      quote: "Buffett: la diferencia entre la gente exitosa y la muy exitosa es que la segunda dice no a casi todo.",
-      metric: { amt: 3, unit: "count", label: ["prioridad", "prioridades"] } },
-    { id: "deep", cat: "dia", name: "Bloque de trabajo profundo (90 min)", who: "Bill Gates · Elon Musk",
-      quote: "Gates se toma «semanas para pensar» sin interrupciones; Musk organiza su día en bloques de tiempo.",
-      metric: { amt: 90, unit: "min", note: "de enfoque" } },
-    { id: "read", cat: "dia", name: "Leer 30 minutos", who: "Warren Buffett · Bill Gates",
-      quote: "Buffett lee gran parte del día: «el conocimiento se acumula como el interés compuesto». Gates lee unos 50 libros al año.",
-      metric: { amt: 20, unit: "pages" } },
-    { id: "learn", cat: "dia", name: "Aprender algo nuevo (regla de 5 horas)", who: "Benjamin Franklin",
-      quote: "Una hora diaria, cinco a la semana, de aprendizaje deliberado.",
-      metric: { amt: 60, unit: "min", note: "de aprendizaje" } },
-    { id: "connect", cat: "dia", name: "Contactar a alguien de mi red", who: "Oprah · Reid Hoffman",
-      quote: "Las relaciones también crecen con el tiempo: un mensaje, una llamada, un agradecimiento.",
-      metric: { amt: 1, unit: "count", label: ["conversación", "conversaciones"] } },
-    { id: "journal", cat: "noche", name: "Diario de gratitud (3 cosas)", who: "Oprah Winfrey",
-      quote: "Oprah escribió durante años cinco cosas por las que estaba agradecida cada día.",
-      metric: { amt: 3, unit: "count", label: ["gratitud", "gratitudes"] } },
-    { id: "review", cat: "noche", name: "Revisar el día y planear mañana", who: "Benjamin Franklin",
-      quote: "Franklin se preguntaba cada mañana «¿qué bien haré hoy?» y cada noche «¿qué bien he hecho hoy?».",
-      metric: { amt: 1, unit: "count", label: ["día planeado", "días planeados"] } },
-    { id: "sleep", cat: "noche", name: "Dormir 7–8 horas", who: "Jeff Bezos",
-      quote: "Bezos prioriza dormir ocho horas: dice que piensa con más claridad y tiene más energía.",
-      metric: { amt: 1, unit: "count", label: ["noche de descanso", "noches de descanso"] } },
-    // Finanzas personales
-    { id: "money", cat: "finanzas", name: "Págate primero: apartar mi ahorro del día", who: "Warren Buffett · George S. Clason",
-      quote: "«No ahorres lo que queda después de gastar; gasta lo que queda después de ahorrar.» Clason, en El hombre más rico de Babilonia: guarda una parte de todo lo que ganas.",
-      metric: { amt: 1, unit: "money" } },
-    { id: "ledger", cat: "finanzas", name: "Registrar todos mis gastos del día", who: "John D. Rockefeller",
-      quote: "Desde los 16 años Rockefeller anotó cada centavo que ganaba y gastaba en su «Ledger A», que guardó toda su vida.",
-      metric: { amt: 1, unit: "count", label: ["día registrado", "días registrados"] } },
-    { id: "wait24", cat: "finanzas", name: "Regla de 24 h antes de compras no planeadas", who: "Warren Buffett",
-      quote: "Buffett vive desde 1958 en la casa que compró en Omaha por 31.500 dólares.",
-      metric: { amt: 1, unit: "count", label: ["día sin compras impulsivas", "días sin compras impulsivas"] } },
-    { id: "invest", cat: "finanzas", name: "Aprender 15 min sobre inversión", who: "Charlie Munger",
-      quote: "«Ve a dormir un poco más sabio de lo que eras cuando te levantaste.»",
-      metric: { amt: 15, unit: "min", note: "de educación financiera" } },
-    { id: "budget", cat: "finanzas", name: "Revisar saldos y presupuesto (5 min)", who: "Robert Kiyosaki",
-      quote: "Kiyosaki insiste en conocer tus números: qué son activos que ponen dinero en tu bolsillo y qué son pasivos que lo sacan.",
-      metric: { amt: 1, unit: "count", label: ["revisión", "revisiones"] } },
-    { id: "side", cat: "finanzas", name: "30 min construyendo un ingreso extra", who: "Warren Buffett",
-      quote: "«Si no encuentras una forma de ganar dinero mientras duermes, trabajarás hasta que mueras.»",
-      metric: { amt: 30, unit: "min", note: "en tu proyecto" } }
+    { id: "wake", cat: "manana", name: "Levantarme antes de las 6:00", who: "Tim Cook · Indra Nooyi", quote: "Tim Cook empieza su día cerca de las 4:00 para leer y hacer ejercicio antes de que el mundo despierte.", metric: { amt: 60, unit: "min", note: "de tiempo propio" } },
+    { id: "move", cat: "manana", name: "Ejercicio 30 minutos", who: "Richard Branson", quote: "Branson dice que hacer ejercicio cada mañana le da al menos cuatro horas extra de productividad al día.", metric: { amt: 30, unit: "min", note: "de ejercicio" } },
+    { id: "meditate", cat: "manana", name: "Meditar 15 minutos", who: "Ray Dalio · Oprah", quote: "Ray Dalio medita desde 1969 y la considera la mayor razón de cualquier éxito que haya tenido.", metric: { amt: 15, unit: "min", note: "de meditación" } },
+    { id: "top3", cat: "manana", name: "Definir mis 3 prioridades del día", who: "Jeff Bezos · Warren Buffett", quote: "La diferencia entre la gente exitosa y la muy exitosa es que la segunda dice no a casi todo.", metric: { amt: 3, unit: "count", label: ["prioridad", "prioridades"] } },
+    { id: "deep", cat: "dia", name: "Bloque de trabajo profundo (90 min)", who: "Bill Gates · Elon Musk", quote: "Gates se toma «semanas para pensar» sin interrupciones; Musk organiza su día en bloques de tiempo.", metric: { amt: 90, unit: "min", note: "de enfoque" } },
+    { id: "read", cat: "dia", name: "Leer 30 minutos", who: "Warren Buffett · Bill Gates", quote: "«El conocimiento se acumula como el interés compuesto.» Gates lee unos 50 libros al año.", metric: { amt: 20, unit: "pages" } },
+    { id: "learn", cat: "dia", name: "Aprender algo nuevo (regla de 5 horas)", who: "Benjamin Franklin", quote: "Una hora diaria, cinco a la semana, de aprendizaje deliberado.", metric: { amt: 60, unit: "min", note: "de aprendizaje" } },
+    { id: "connect", cat: "dia", name: "Contactar a alguien de mi red", who: "Oprah · Reid Hoffman", quote: "Las relaciones también crecen con el tiempo: un mensaje, una llamada, un agradecimiento.", metric: { amt: 1, unit: "count", label: ["conversación", "conversaciones"] } },
+    { id: "journal", cat: "noche", name: "Diario de gratitud (3 cosas)", who: "Oprah Winfrey", quote: "Oprah escribió durante años cinco cosas por las que estaba agradecida cada día.", metric: { amt: 3, unit: "count", label: ["gratitud", "gratitudes"] } },
+    { id: "review", cat: "noche", name: "Revisar el día y planear mañana", who: "Benjamin Franklin", quote: "Cada mañana: «¿qué bien haré hoy?». Cada noche: «¿qué bien he hecho hoy?».", metric: { amt: 1, unit: "count", label: ["día planeado", "días planeados"] } },
+    { id: "sleep", cat: "noche", name: "Dormir 7–8 horas", who: "Jeff Bezos", quote: "Bezos prioriza dormir ocho horas: dice que piensa con más claridad y tiene más energía.", metric: { amt: 1, unit: "count", label: ["noche de descanso", "noches de descanso"] } },
+    { id: "money", cat: "finanzas", name: "Págate primero: apartar mi ahorro del día", who: "Warren Buffett · George S. Clason", quote: "«No ahorres lo que queda después de gastar; gasta lo que queda después de ahorrar.»", metric: { amt: 1, unit: "money" } },
+    { id: "ledger", cat: "finanzas", name: "Registrar todos mis gastos del día", who: "John D. Rockefeller", quote: "Desde los 16 años anotó cada centavo que ganaba y gastaba en su «Ledger A», que guardó toda su vida.", metric: { amt: 1, unit: "count", label: ["día registrado", "días registrados"] }, go: "gastos" },
+    { id: "wait24", cat: "finanzas", name: "Regla de 24 h antes de compras no planeadas", who: "Warren Buffett", quote: "Buffett vive desde 1958 en la casa que compró en Omaha por 31.500 dólares.", metric: { amt: 1, unit: "count", label: ["día sin compras impulsivas", "días sin compras impulsivas"] } },
+    { id: "invest", cat: "finanzas", name: "Aprender 15 min sobre inversión", who: "Charlie Munger", quote: "«Ve a dormir un poco más sabio de lo que eras cuando te levantaste.»", metric: { amt: 15, unit: "min", note: "de educación financiera" } },
+    { id: "budget", cat: "finanzas", name: "Revisar saldos y presupuesto (5 min)", who: "Robert Kiyosaki", quote: "Conoce tus números: los activos ponen dinero en tu bolsillo; los pasivos lo sacan.", metric: { amt: 1, unit: "count", label: ["revisión", "revisiones"] } },
+    { id: "side", cat: "finanzas", name: "30 min construyendo un ingreso extra", who: "Warren Buffett", quote: "«Si no encuentras una forma de ganar dinero mientras duermes, trabajarás hasta que mueras.»", metric: { amt: 30, unit: "min", note: "en tu proyecto" }, go: "ingreso" }
   ];
   const LIB = Object.fromEntries(LIBRARY.map(h => [h.id, h]));
   const CATS = { manana: "Mañana", dia: "Durante el día", noche: "Noche", finanzas: "Finanzas" };
   const CAT_WHY = {
-    manana: "Ganar la mañana: tiempo propio, energía y claridad antes de que empiecen las demandas de los demás.",
-    dia: "Donde se construye la ventaja: trabajo concentrado, lectura y relaciones que se acumulan año tras año.",
-    noche: "Cerrar el ciclo: agradecer, aprender del día y descansar para rendir mañana.",
-    finanzas: "Los hábitos de dinero de quienes construyeron fortunas: ahorrar primero, medir todo, gastar con intención y aprender a invertir."
+    manana: "Tiempo propio, energía y claridad antes de que empiecen las demandas de los demás.",
+    dia: "Donde se construye la ventaja: enfoque, lectura y relaciones que se acumulan.",
+    noche: "Cerrar el ciclo: agradecer, aprender del día y descansar.",
+    finanzas: "Ahorrar primero, medir todo, gastar con intención y aprender a invertir."
   };
   const TAB_CATS = { rutina: ["manana", "dia", "noche"], finanzas: ["finanzas"] };
+  const TABS = ["rutina", "finanzas", "gastos", "ingreso"];
   const PERIODS = [["Diario", 1], ["Mensual", 30], ["Trimestral", 91], ["Anual", 365]];
+
+  const EXP_CATS = ["Comida y café", "Mercado", "Transporte", "Hogar y servicios", "Salud y cuidado", "Ocio y salidas", "Ropa y compras", "Materiales y trabajo", "Suscripciones", "Regalos", "Otros"];
+
+  // ---------- Side income guide ----------
+  const PATHS = [
+    { id: "obra", t: "Vender tu obra", l: "Originales y láminas impresas de tus pinturas.",
+      start: "Fotografía 10 obras con luz natural y elige 3 para imprimir como láminas.",
+      price: "Precio por tamaño (A5, A4, A3) y originales aparte. Suma materiales, impresión, envío y tu tiempo.",
+      where: "Instagram, tienda en Shopify o Etsy, mercados y ferias de arte locales.",
+      tip: "Una lámina se vende muchas veces; un original, una sola. Ofrece las dos." },
+    { id: "digital", t: "Productos digitales", l: "Plantillas, planners, fondos de pantalla, pinceles para Procreate.",
+      start: "Convierte una de tus paletas o texturas en un pack descargable sencillo.",
+      price: "Precio bajo y fijo; luego packs y paquetes combinados.",
+      where: "Etsy, Gumroad, Hotmart o Payhip.",
+      tip: "Lo creas una vez y se vende mientras duermes: es el camino más cercano a la frase de Buffett." },
+    { id: "talleres", t: "Talleres y clases", l: "Pintura intuitiva, acuarela o color, presencial u online.",
+      start: "Diseña un taller de 2 horas e invita a 5 personas cercanas a una primera edición a precio de lanzamiento.",
+      price: "Por persona e incluyendo materiales. Grupos pequeños al inicio.",
+      where: "Tu casa o un café aliado, Zoom, Instagram y grupos de WhatsApp.",
+      tip: "Enseñar convierte lo que ya sabes en ingreso inmediato y te trae compradoras de tu obra." },
+    { id: "encargos", t: "Encargos por comisión", l: "Retratos, murales pequeños, obras a la medida.",
+      start: "Publica 3 ejemplos y abre 3 cupos de encargo este mes.",
+      price: "Precio por tamaño y complejidad, con 50% de anticipo.",
+      where: "Instagram, recomendaciones de clientes, decoradoras y arquitectas.",
+      tip: "Pocos cupos y fechas claras protegen tu tiempo y suben el valor percibido." },
+    { id: "freelance", t: "Servicios creativos", l: "Ilustración, identidad visual, contenido para marcas.",
+      start: "Arma un portafolio de 6 piezas y escribe a 3 marcas que admiras.",
+      price: "Por proyecto, nunca por hora. Paquetes básico, medio y completo.",
+      where: "LinkedIn, Behance, Instagram y contactos directos.",
+      tip: "Es el camino más rápido para el primer ingreso; úsalo para financiar los otros." },
+    { id: "licencias", t: "Licencias e impresión bajo demanda", l: "Tus diseños en textiles, papelería, tazas o cuadernos.",
+      start: "Sube 5 diseños a una plataforma de impresión bajo demanda.",
+      price: "La plataforma produce y envía; tú recibes un margen por venta.",
+      where: "Redbubble, Society6, Spoonflower o marcas locales que licencian arte.",
+      tip: "Ingreso pequeño pero sin inventario; crece con el número de diseños." }
+  ];
+  const RHYTHM = [
+    [1, "Crear", "Avanza en el producto u oferta: una lámina, una plantilla, el temario del taller."],
+    [2, "Mostrar", "Publica una pieza o el proceso. Una historia o un post basta."],
+    [3, "Conversar", "Responde mensajes y escribe a 3 personas: clientas, aliadas o marcas."],
+    [4, "Mejorar", "Aprende una sola cosa: fotografía de producto, precios, un tutorial."],
+    [5, "Vender", "Haz una oferta directa: abre cupos, lanza un producto, envía el enlace."],
+    [6, "Medir", "Revisa ventas, mensajes y qué funcionó. Anótalo en la bitácora."],
+    [0, "Descansar", "Pausa o planea la semana. El descanso también es parte del sistema."]
+  ];
+  const DAY_LONG = ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"];
+  const PHASES = [
+    { t: "Días 1–30", h: "Validar", ms: [["p1", "Elegir un solo camino"], ["p2", "Definir para quién es y qué problema o deseo resuelve"], ["p3", "Crear una oferta con precio claro"], ["p4", "Mostrarla a 10 personas y pedir opinión"]] },
+    { t: "Días 31–60", h: "Primera venta", ms: [["p5", "Publicar 3 veces por semana"], ["p6", "Conseguir las primeras 3 ventas o clientas"], ["p7", "Pedir un testimonio a cada una"]] },
+    { t: "Días 61–90", h: "Sistema", ms: [["p8", "Tener una tienda o página donde comprar"], ["p9", "Registrar cada ingreso aquí"], ["p10", "Fijar una meta de ingreso mensual"], ["p11", "Subir precio o lanzar un segundo producto"]] }
+  ];
+
   const DAY_NAMES = ["dom", "lun", "mar", "mié", "jue", "vie", "sáb"];
   const MONTHS = ["enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre"];
   const LS_KEY = "habitos-compuestos-v1";
-  const CHECK_SVG = '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8.5l3.2 3L13 4.5"/></svg>';
-  const STATE_V = 2;
+  const CHECK_SVG = '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 8.5l3 3L12.5 5"/></svg>';
+  const STATE_V = 3;
 
   // ---------- Dates ----------
   const pad = n => String(n).padStart(2, "0");
   const keyOf = d => d.getFullYear() + "-" + pad(d.getMonth() + 1) + "-" + pad(d.getDate());
+  const parseKey = k => { const [y, m, d] = k.split("-").map(Number); return new Date(y, m - 1, d); };
   const addDays = (d, n) => { const x = new Date(d); x.setDate(x.getDate() + n); return x; };
   const today = () => { const d = new Date(); return new Date(d.getFullYear(), d.getMonth(), d.getDate()); };
+  const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
 
   // ---------- State ----------
   const DEFAULT_SETTINGS = { daily: 10, currency: "USD", rate: 8 };
-  function fromLib(h) { return { id: h.id, name: h.name, cat: h.cat, who: h.who, quote: h.quote }; }
-  function defaultState() { return { v: STATE_V, habits: LIBRARY.map(fromLib), log: {}, settings: { ...DEFAULT_SETTINGS } }; }
+  const fromLib = h => ({ id: h.id, name: h.name, cat: h.cat, who: h.who, quote: h.quote });
+  const defaultSide = () => ({ path: null, milestones: {}, notes: {}, income: [] });
+  const defaultState = () => ({ v: STATE_V, habits: LIBRARY.map(fromLib), log: {}, settings: { ...DEFAULT_SETTINGS }, expenses: [], side: defaultSide() });
+  const isKey = k => typeof k === "string" && /^\d{4}-\d{2}-\d{2}$/.test(k);
+  const okAmt = a => Number.isFinite(+a) && +a >= 0 && +a < 1e12;
   function sanitize(s) {
     if (!s || !Array.isArray(s.habits) || typeof s.log !== "object" || s.log === null) return defaultState();
-    let habits = s.habits.filter(h => h && typeof h.id === "string" && typeof h.name === "string").map(h =>
-      LIB[h.id] ? fromLib(LIB[h.id])   // library habits always take the latest wording and category
-        : { id: h.id, name: String(h.name).slice(0, 80), cat: CATS[h.cat] ? h.cat : "dia", who: "", quote: "" });
-    // v2 adds the personal-finance section to existing lists once.
+    const habits = s.habits.filter(h => h && typeof h.id === "string" && typeof h.name === "string").map(h =>
+      LIB[h.id] ? fromLib(LIB[h.id]) : { id: h.id, name: String(h.name).slice(0, 80), cat: CATS[h.cat] ? h.cat : "dia", who: "", quote: "" });
     if ((s.v || 1) < 2) {
       const have = new Set(habits.map(h => h.id));
       LIBRARY.filter(h => h.cat === "finanzas" && !have.has(h.id)).forEach(h => habits.push(fromLib(h)));
     }
     const st = s.settings || {};
-    const settings = {
-      daily: Number.isFinite(+st.daily) && +st.daily >= 0 ? +st.daily : DEFAULT_SETTINGS.daily,
-      currency: /^[A-Z]{3}$/.test(st.currency) ? st.currency : DEFAULT_SETTINGS.currency,
-      rate: Number.isFinite(+st.rate) && +st.rate >= 0 && +st.rate <= 30 ? +st.rate : DEFAULT_SETTINGS.rate
-    };
+    const sd = s.side && typeof s.side === "object" ? s.side : {};
     return {
-      v: STATE_V, habits, settings,
-      log: Object.fromEntries(Object.entries(s.log).filter(([k, v]) => /^\d{4}-\d{2}-\d{2}$/.test(k) && Array.isArray(v)).map(([k, v]) => [k, v.filter(x => typeof x === "string")]))
+      v: STATE_V, habits,
+      settings: {
+        daily: okAmt(st.daily) ? +st.daily : DEFAULT_SETTINGS.daily,
+        currency: /^[A-Z]{3}$/.test(st.currency) ? st.currency : DEFAULT_SETTINGS.currency,
+        rate: Number.isFinite(+st.rate) && +st.rate >= 0 && +st.rate <= 30 ? +st.rate : DEFAULT_SETTINGS.rate
+      },
+      log: Object.fromEntries(Object.entries(s.log).filter(([k, v]) => isKey(k) && Array.isArray(v)).map(([k, v]) => [k, v.filter(x => typeof x === "string")])),
+      expenses: (Array.isArray(s.expenses) ? s.expenses : []).filter(e => e && isKey(e.d) && okAmt(e.amt))
+        .map(e => ({ id: String(e.id || uid()), d: e.d, amt: +e.amt, cat: EXP_CATS.includes(e.cat) ? e.cat : "Otros", kind: e.kind === "want" ? "want" : "need", note: String(e.note || "").slice(0, 80) })),
+      side: {
+        path: PATHS.some(p => p.id === sd.path) ? sd.path : null,
+        milestones: Object.fromEntries(Object.entries(sd.milestones || {}).filter(([k, v]) => /^p\d+$/.test(k) && v === true)),
+        notes: Object.fromEntries(Object.entries(sd.notes || {}).filter(([k, v]) => isKey(k) && typeof v === "string" && v.trim()).map(([k, v]) => [k, v.slice(0, 500)])),
+        income: (Array.isArray(sd.income) ? sd.income : []).filter(e => e && isKey(e.d) && okAmt(e.amt)).map(e => ({ id: String(e.id || uid()), d: e.d, amt: +e.amt, note: String(e.note || "").slice(0, 80) }))
+      }
     };
   }
 
   let state = defaultState();
   try { const raw = localStorage.getItem(LS_KEY); if (raw) state = sanitize(JSON.parse(raw)); } catch (e) {}
 
-  let tab = location.hash === "#finanzas" ? "finanzas" : "rutina";
+  const hashTab = () => { const h = location.hash.slice(1); return TABS.includes(h) ? h : "rutina"; };
+  let tab = hashTab();
   let selected = today();
   let editing = false;
+  let expKind = "need";
   const openQuotes = new Set();
+  let openPath = state.side.path;
   let pendingDelete = null;
 
   // ---------- Persistence ----------
   let docRef = null, saveTimer = null, lastSaved = "";
   const syncEl = document.getElementById("sync");
-  function setSync(text, ok) { syncEl.textContent = text; syncEl.classList.toggle("ok", !!ok); }
-  setSync("Guardado en este navegador", true);
+  const setSync = t => { syncEl.textContent = t; };
+  setSync("Guardado en este navegador");
   function persist() {
     try { localStorage.setItem(LS_KEY, JSON.stringify(state)); } catch (e) {}
     if (!docRef) return;
     clearTimeout(saveTimer);
-    setSync("Guardando…", false);
+    setSync("Guardando…");
     saveTimer = setTimeout(async () => {
       const payload = JSON.stringify(state);
       try {
-        await docRef.set({ v: state.v, habits: state.habits, log: state.log, settings: state.settings, updatedAt: Date.now() });
+        await docRef.set({ ...JSON.parse(payload), updatedAt: Date.now() });
         lastSaved = payload;
-        setSync("Guardado en tu cuenta", true);
-      } catch (e) { setSync("No se pudo guardar en la nube; queda en este navegador", false); }
+        setSync("Guardado en tu cuenta");
+      } catch (e) { setSync("Sin conexión: guardado en este navegador"); }
     }, 600);
   }
   (async function connect() {
@@ -439,11 +592,11 @@ footer { font-size: 12px; color: var(--muted); border-top: 1px solid var(--line)
     try {
       const [db, user] = await Promise.all([window.claude.use("db"), window.claude.use("user")]);
       if (!db || !user) return;
-      const uid = await user.id();
-      if (!uid) return;
-      docRef = db.doc("data/users/" + uid + "/tracker");
-      setSync("Conectando…", false);
-      const timeout = setTimeout(() => setSync("Guardado en este navegador", true), 10000);
+      const id = await user.id();
+      if (!id) return;
+      docRef = db.doc("data/users/" + id + "/tracker");
+      setSync("Conectando…");
+      const timeout = setTimeout(() => setSync("Guardado en este navegador"), 10000);
       let first = true;
       docRef.onSnapshot(snap => {
         clearTimeout(timeout);
@@ -457,194 +610,156 @@ footer { font-size: 12px; color: var(--muted); border-top: 1px solid var(--line)
             render();
           }
           lastSaved = str;
-          setSync("Guardado en tu cuenta", true);
-          if ((remote.v || 1) < STATE_V && first) persist();   // save the migrated list once
-        } else if (first) { persist(); }
+          setSync("Guardado en tu cuenta");
+          if (first && (remote.v || 1) < STATE_V) persist();
+        } else if (first) persist();
         first = false;
-      }, () => { clearTimeout(timeout); docRef = null; setSync("Guardado en este navegador", true); });
+      }, () => { clearTimeout(timeout); docRef = null; setSync("Guardado en este navegador"); });
     } catch (e) {}
   })();
 
   // ---------- Formatting ----------
-  const nf = (n, d = 0) => new Intl.NumberFormat("es", { maximumFractionDigits: d, minimumFractionDigits: 0 }).format(n);
-  function money(n) {
-    try { return new Intl.NumberFormat("es", { style: "currency", currency: state.settings.currency, maximumFractionDigits: n < 100 && n % 1 ? 2 : 0 }).format(n); }
-    catch (e) { return "$" + nf(n); }
+  const nf = (n, d = 0) => new Intl.NumberFormat("es", { maximumFractionDigits: d }).format(n);
+  function money(n, compact) {
+    try {
+      return new Intl.NumberFormat("es", { style: "currency", currency: state.settings.currency,
+        notation: compact && Math.abs(n) >= 10000 ? "compact" : "standard",
+        maximumFractionDigits: compact ? (Math.abs(n) >= 10000 ? 1 : 0) : (n % 1 && Math.abs(n) < 1000 ? 2 : 0) }).format(n);
+    } catch (e) { return "$" + nf(n); }
   }
   const metricOf = h => (LIB[h.id] && LIB[h.id].metric) || { amt: 1, unit: "count", label: ["día cumplido", "días cumplidos"] };
-  // Returns {main, sub} for `times` completions of habit h
   function amount(h, times) {
     const m = metricOf(h);
-    if (m.unit === "min") {
-      const mins = m.amt * times;
-      const main = mins < 60 ? nf(mins) + " min" : nf(mins / 60, mins / 60 < 10 ? 1 : 0) + " h";
-      return { main, sub: m.note || "" };
-    }
-    if (m.unit === "pages") {
-      const p = m.amt * times;
-      return { main: nf(p) + " págs", sub: times >= 30 ? "≈ " + nf(p / 300, 1) + " libros" : "" };
-    }
+    if (m.unit === "min") { const mins = m.amt * times; return { main: mins < 60 ? nf(mins) + " min" : nf(mins / 60, mins / 60 < 10 ? 1 : 0) + " h", sub: m.note || "" }; }
+    if (m.unit === "pages") { const p = m.amt * times; return { main: nf(p) + " págs", sub: times >= 30 ? "≈ " + nf(p / 300, 1) + " libros" : "" }; }
     if (m.unit === "money") return { main: money(state.settings.daily * times), sub: "ahorrado" };
-    const n = m.amt * times;
-    return { main: nf(n) + " " + (n === 1 ? m.label[0] : m.label[1]), sub: "" };
+    const n = m.amt * times; return { main: nf(n) + " " + (n === 1 ? m.label[0] : m.label[1]), sub: "" };
   }
 
   // ---------- Metrics ----------
   const doneOn = k => new Set(state.log[k] || []);
   const habitsIn = cats => state.habits.filter(h => cats.includes(h.cat));
-  function dayRatio(d, hs) {
-    if (!hs.length) return 0;
-    const s = doneOn(keyOf(d));
-    return hs.filter(h => s.has(h.id)).length / hs.length;
+  const hasHabit = id => state.habits.some(h => h.id === id);
+  function markDone(id, k) {
+    if (!hasHabit(id)) return;
+    const s = doneOn(k); s.add(id); state.log[k] = [...s];
   }
-  function habitStreak(id) {
-    let d = today();
-    if (!doneOn(keyOf(d)).has(id)) d = addDays(d, -1);
-    let n = 0;
-    while (doneOn(keyOf(d)).has(id)) { n++; d = addDays(d, -1); }
-    return n;
-  }
-  function dayStreak(hs) {
-    let d = today();
-    if (dayRatio(d, hs) < 0.8) d = addDays(d, -1);
-    let n = 0;
-    while (n < 3650 && dayRatio(d, hs) >= 0.8) { n++; d = addDays(d, -1); }
-    return n;
-  }
-  function countChecks(id, pred) {
-    let n = 0;
-    for (const [k, v] of Object.entries(state.log)) if (pred(k) && v.includes(id)) n++;
-    return n;
-  }
+  function dayRatio(d, hs) { if (!hs.length) return 0; const s = doneOn(keyOf(d)); return hs.filter(h => s.has(h.id)).length / hs.length; }
+  function habitStreak(id) { let d = today(); if (!doneOn(keyOf(d)).has(id)) d = addDays(d, -1); let n = 0; while (doneOn(keyOf(d)).has(id)) { n++; d = addDays(d, -1); } return n; }
+  function dayStreak(hs) { let d = today(); if (dayRatio(d, hs) < 0.8) d = addDays(d, -1); let n = 0; while (n < 3650 && dayRatio(d, hs) >= 0.8) { n++; d = addDays(d, -1); } return n; }
+  function countChecks(id, pred) { let n = 0; for (const [k, v] of Object.entries(state.log)) if (pred(k) && v.includes(id)) n++; return n; }
   function periodPreds() {
-    const t = today(), y = t.getFullYear(), m = t.getMonth();
-    const ym = y + "-" + pad(m + 1), q = Math.floor(m / 3);
-    return [
-      ["hoy", k => k === keyOf(t)],
-      ["este mes", k => k.startsWith(ym)],
-      ["este trimestre", k => k.startsWith(y + "-") && Math.floor((+k.slice(5, 7) - 1) / 3) === q],
-      ["este año", k => k.startsWith(y + "-")]
-    ];
+    const t = today(), y = t.getFullYear(), m = t.getMonth(), ym = y + "-" + pad(m + 1), q = Math.floor(m / 3);
+    return [["hoy", k => k === keyOf(t)], ["este mes", k => k.startsWith(ym)],
+      ["este trimestre", k => k.startsWith(y + "-") && Math.floor((+k.slice(5, 7) - 1) / 3) === q], ["este año", k => k.startsWith(y + "-")]];
   }
-  // Future value of monthly deposits at annual rate r, after `years`
-  function futureValue(monthly, r, years) {
-    const i = r / 100 / 12, n = years * 12;
-    return i === 0 ? monthly * n : monthly * ((Math.pow(1 + i, n) - 1) / i);
-  }
+  const futureValue = (monthly, r, years) => { const i = r / 100 / 12, n = years * 12; return i === 0 ? monthly * n : monthly * ((Math.pow(1 + i, n) - 1) / i); };
+  const expOn = k => state.expenses.filter(e => e.d === k);
+  const sum = arr => arr.reduce((a, e) => a + e.amt, 0);
 
   // ---------- Render ----------
   const $ = id => document.getElementById(id);
   const esc = s => String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  const dateLabel = d => (keyOf(d) === keyOf(today()) ? "Hoy, " : DAY_NAMES[d.getDay()].replace(/^./, m => m.toUpperCase()) + " ") + d.getDate() + " de " + MONTHS[d.getMonth()];
 
   function render() {
-    const t = today();
-    const cats = TAB_CATS[tab];
-    const hs = habitsIn(cats);
-    const isToday = keyOf(selected) === keyOf(t);
-    const dayKey = keyOf(selected);
-    const done = doneOn(dayKey);
-    const n = hs.length, c = hs.filter(h => done.has(h.id)).length;
-
+    const t = today(), dayKey = keyOf(selected), isToday = dayKey === keyOf(t);
     document.querySelectorAll(".tab").forEach(b => b.setAttribute("aria-selected", String(b.dataset.tab === tab)));
-    $("view").setAttribute("aria-labelledby", "tab-" + tab);
-    $("score").classList.toggle("fin", tab === "finanzas");
-    $("finBox").hidden = tab !== "finanzas";
+    $("main").setAttribute("aria-labelledby", "tab-" + tab);
+    const habitTab = tab === "rutina" || tab === "finanzas";
+    $("vHabits").hidden = !habitTab; $("vGastos").hidden = tab !== "gastos"; $("vIngreso").hidden = tab !== "ingreso";
 
-    // Score
-    $("pct").textContent = (n ? Math.round((c / n) * 100) : 0) + "%";
-    $("of").textContent = c + " de " + n;
-    $("ringFill").setAttribute("stroke-dashoffset", String(326.73 * (1 - (n ? c / n : 0))));
-    $("sStreak").textContent = dayStreak(hs);
-    let w = 0; for (let i = 0; i < 7; i++) w += dayRatio(addDays(t, -i), hs);
-    $("sWeek").textContent = Math.round((w / 7) * 100) + "%";
-    if (tab === "finanzas") {
-      const saved = countChecks("money", () => true) * state.settings.daily;
-      $("sTotal").textContent = money(saved);
-      $("sTotalLbl").textContent = "ahorrado en total";
-      const yearly = state.settings.daily * 365;
-      $("compound").innerHTML = "Apartar <strong>" + money(state.settings.daily) + "</strong> al día son <strong>" + money(yearly) + "</strong> al año. Invertidos al " + nf(state.settings.rate, 1) + "% anual, en 10 años serían <strong>" + money(futureValue(state.settings.daily * 365 / 12, state.settings.rate, 10)) + "</strong>.";
-    } else {
-      const ids = new Set(hs.map(h => h.id));
-      let tot = 0; for (const v of Object.values(state.log)) tot += v.filter(id => ids.has(id)).length;
-      $("sTotal").textContent = nf(tot);
-      $("sTotalLbl").textContent = "hábitos cumplidos";
-      const days = Object.values(state.log).filter(v => v.some(id => ids.has(id))).length;
-      $("compound").innerHTML = days
-        ? "Llevas <strong>" + days + "</strong> " + (days === 1 ? "día" : "días") + " registrados. Si cada uno te hizo 1% mejor: <strong>1,01<sup>" + days + "</sup> = " + Math.pow(1.01, days).toFixed(2).replace(".", ",") + "×</strong>. En un año completo serían <strong>37,8×</strong>."
-        : "Mejorar 1% cada día durante un año: <strong>1,01<sup>365</sup> = 37,8×</strong>. Marca tu primer hábito para empezar a sumar.";
-    }
-
-    // Date heading + week strip
-    $("dateTitle").innerHTML = isToday ? "Hoy, <em>" + selected.getDate() + " de " + MONTHS[selected.getMonth()] + "</em>"
-      : DAY_NAMES[selected.getDay()].replace(/^./, m => m.toUpperCase()) + " <em>" + selected.getDate() + " de " + MONTHS[selected.getMonth()] + "</em>";
+    // Day line
+    const [d0, ...dRest] = dateLabel(selected).split(" ");
+    $("dateTitle").innerHTML = esc(d0) + " <em>" + esc(dRest.join(" ")) + "</em>";
     $("goToday").hidden = isToday;
+    const hsTab = habitTab ? habitsIn(TAB_CATS[tab]) : [];
     let end = addDays(selected, 3); if (end > t) end = t;
     const start = addDays(end, -6);
     let wh = '<button class="nav" id="prevWeek" aria-label="Semana anterior">‹</button>';
     for (let i = 0; i < 7; i++) {
-      const d = addDays(start, i), k = keyOf(d), r = dayRatio(d, hs);
-      wh += '<button class="day' + (k === dayKey ? " sel" : "") + (k === keyOf(t) ? " today" : "") + '" data-day="' + k + '" aria-label="' + d.getDate() + " de " + MONTHS[d.getMonth()] + ", " + Math.round(r * 100) + '% completado">' +
-        '<span class="dname">' + DAY_NAMES[d.getDay()] + '</span><span class="dnum num">' + d.getDate() + '</span><span class="bar"><i style="width:' + Math.round(r * 100) + '%"></i></span></button>';
+      const d = addDays(start, i), k = keyOf(d);
+      let extra, aria;
+      if (tab === "gastos") { const s = sum(expOn(k)); extra = '<span class="dx num">' + (s ? money(s, true) : (doneOn(k).has("ledger") ? "0" : "")) + "</span>"; aria = s ? money(s) + " gastado" : "sin gastos"; }
+      else if (tab === "ingreso") { const on = doneOn(k).has("side") || !!state.side.notes[k]; extra = '<span class="bar"><i style="width:' + (on ? 100 : 0) + '%"></i></span>'; aria = on ? "sesión hecha" : "sin sesión"; }
+      else { const r = dayRatio(d, hsTab); extra = '<span class="bar"><i style="width:' + Math.round(r * 100) + '%"></i></span>'; aria = Math.round(r * 100) + "% completado"; }
+      wh += '<button class="day' + (k === dayKey ? " sel" : "") + (k === keyOf(t) ? " today" : "") + '" data-day="' + k + '" aria-label="' + d.getDate() + " de " + MONTHS[d.getMonth()] + ", " + aria + '"><span class="dn">' + DAY_NAMES[d.getDay()] + '</span><span class="dd num">' + d.getDate() + "</span>" + extra + "</button>";
     }
-    wh += '<button class="nav" id="nextWeek" aria-label="Semana siguiente"' + (keyOf(end) === keyOf(t) ? " disabled" : "") + '>›</button>';
+    wh += '<button class="nav" id="nextWeek" aria-label="Semana siguiente"' + (keyOf(end) === keyOf(t) ? " disabled" : "") + ">›</button>";
     $("week").innerHTML = wh;
 
-    // Checklist
-    let gh = "";
-    if (!n) gh = '<p class="empty">No tienes hábitos en esta sección. Abre <b>Editar lista</b> abajo para agregar uno o elegir una sugerencia.</p>';
-    for (const cat of cats) {
-      const list = hs.filter(h => h.cat === cat);
-      if (!list.length) continue;
-      const cd = list.filter(h => done.has(h.id)).length;
-      gh += '<div class="group"><div class="ghead"><h3>' + (cat === "finanzas" ? "Hábitos de <em>dinero</em>" : CATS[cat]) + '</h3><span class="label num">' + cd + " / " + list.length + '</span></div><div class="list">';
-      for (const h of list) {
-        const on = done.has(h.id), st = habitStreak(h.id);
-        let dots = "";
-        for (let i = 6; i >= 0; i--) dots += '<i class="' + (doneOn(keyOf(addDays(selected, -i))).has(h.id) ? "on" : "") + '"></i>';
-        gh += '<div class="habit' + (on ? " done" : "") + '">' +
-          '<button class="check" data-toggle="' + esc(h.id) + '" role="checkbox" aria-checked="' + on + '" aria-label="' + esc(h.name) + '">' + CHECK_SVG + "</button>" +
-          '<div class="hbody"><span class="hname">' + esc(h.name) + "</span>" +
-          (h.who ? '<button class="who" data-quote="' + esc(h.id) + '" aria-expanded="' + openQuotes.has(h.id) + '">' + esc(h.who) + (h.quote ? (openQuotes.has(h.id) ? " ▴" : " ▾") : "") + "</button>" : "") +
-          (h.quote && openQuotes.has(h.id) ? '<div class="quote">' + esc(h.quote) + "</div>" : "") +
-          "</div>" +
-          '<div class="hmeta"><span class="streak num' + (st >= 3 ? " hot" : "") + '" title="Racha actual">racha ' + st + (st === 1 ? " día" : " días") + '</span><span class="dots" aria-hidden="true">' + dots + "</span></div></div>";
-      }
-      gh += "</div></div>";
-    }
-    $("groups").innerHTML = gh;
+    if (habitTab) renderHabits(hsTab, dayKey);
+    if (tab === "gastos") renderGastos(dayKey, isToday);
+    if (tab === "ingreso") renderIngreso(dayKey, isToday);
+    renderEditor();
+  }
 
-    // Finance projection
+  function renderHabits(hs, dayKey) {
+    const t = today(), cats = TAB_CATS[tab], done = doneOn(dayKey);
+    const n = hs.length, c = hs.filter(h => done.has(h.id)).length;
+    $("sToday").textContent = c + "/" + n;
+    $("prog").style.width = (n ? c / n * 100 : 0) + "%";
+    $("sStreak").textContent = dayStreak(hs);
+    let w = 0; for (let i = 0; i < 7; i++) w += dayRatio(addDays(t, -i), hs);
+    $("sWeek").textContent = Math.round(w / 7 * 100) + "%";
+    $("finBox").hidden = tab !== "finanzas";
+    $("heatBox").hidden = tab !== "rutina";
     if (tab === "finanzas") {
       const s = state.settings;
+      $("sTotalLbl").textContent = "Ahorrado";
+      $("sTotal").textContent = money(countChecks("money", () => true) * s.daily, true);
+      $("compound").innerHTML = "Apartar " + money(s.daily) + " al día son <strong>" + money(s.daily * 365) + "</strong> al año. Invertidos al " + nf(s.rate, 1) + "%, en diez años serían <strong>" + money(futureValue(s.daily * 365 / 12, s.rate, 10)) + "</strong>.";
       if (document.activeElement !== $("finDaily")) $("finDaily").value = s.daily;
       if (document.activeElement !== $("finRate")) $("finRate").value = s.rate;
       $("finCur").value = s.currency;
+      $("finNote").innerHTML = "Al mes " + money(s.daily * 30) + " · al trimestre " + money(s.daily * 91) + " · al año " + money(s.daily * 365) + ". Si inviertes cada mes lo que apartas:";
       const monthly = s.daily * 365 / 12;
-      const yrs = [1, 5, 10, 20];
-      const rows = yrs.map(y => ({ y, dep: monthly * 12 * y, fv: futureValue(monthly, s.rate, y) }));
+      const rows = [1, 5, 10, 20].map(y => ({ y, dep: monthly * 12 * y, fv: futureValue(monthly, s.rate, y) }));
       const max = Math.max(...rows.map(r => r.fv), 1);
-      $("finNote").innerHTML = "Mes: <b>" + money(s.daily * 30) + "</b> · Trimestre: <b>" + money(s.daily * 91) + "</b> · Año: <b>" + money(s.daily * 365) + "</b>. Si inviertes cada mes lo que apartas:";
-      $("proj").innerHTML = rows.map(r =>
-        '<div class="prow"><span class="yr">' + r.y + (r.y === 1 ? " año" : " años") + '</span>' +
-        '<div class="track" role="img" aria-label="' + money(r.dep) + " aportados, " + money(r.fv - r.dep) + ' de interés"><i class="dep" style="width:' + (r.dep / max * 100) + '%"></i><i class="gain" style="width:' + (Math.max(0, r.fv - r.dep) / max * 100) + '%"></i></div>' +
-        '<span class="v num">' + money(r.fv) + "</span></div>").join("");
+      $("proj").innerHTML = rows.map(r => '<div class="prow"><span class="label">' + r.y + (r.y === 1 ? " año" : " años") + '</span><div class="track" role="img" aria-label="' + money(r.dep) + " aportados y " + money(r.fv - r.dep) + ' de interés"><i class="dep" style="width:' + (r.dep / max * 100) + '%"></i><i class="gain" style="width:' + (Math.max(0, r.fv - r.dep) / max * 100) + '%"></i></div><span class="v num">' + money(r.fv) + "</span></div>").join("");
+    } else {
+      const ids = new Set(hs.map(h => h.id));
+      let tot = 0; for (const v of Object.values(state.log)) tot += v.filter(id => ids.has(id)).length;
+      $("sTotalLbl").textContent = "Cumplidos";
+      $("sTotal").textContent = nf(tot);
+      const days = Object.values(state.log).filter(v => v.some(id => ids.has(id))).length;
+      $("compound").innerHTML = days
+        ? days + (days === 1 ? " día registrado" : " días registrados") + ". Si cada uno te hizo un 1% mejor: <strong>" + Math.pow(1.01, days).toFixed(2).replace(".", ",") + "×</strong>. Un año completo: <strong>37,8×</strong>."
+        : "Mejorar un 1% cada día durante un año te hace <strong>37,8 veces</strong> mejor. Marca tu primer hábito.";
     }
 
-    // Goals ledger
+    // Checklist
+    let gh = n ? "" : '<p class="empty">No hay hábitos en esta sección. Agrégalos en «Editar lista».</p>';
+    for (const cat of cats) {
+      const list = hs.filter(h => h.cat === cat);
+      if (!list.length) continue;
+      gh += '<div class="group"><div class="ghead"><h3>' + (cat === "finanzas" ? "Hábitos de <em>dinero</em>" : CATS[cat]) + '</h3><span class="label num">' + list.filter(h => done.has(h.id)).length + " / " + list.length + "</span></div>";
+      for (const h of list) {
+        const on = done.has(h.id), st = habitStreak(h.id), lib = LIB[h.id], open = openQuotes.has(h.id);
+        gh += '<div class="habit' + (on ? " done" : "") + '"><button class="check" data-toggle="' + esc(h.id) + '" role="checkbox" aria-checked="' + on + '" aria-label="' + esc(h.name) + '">' + CHECK_SVG + "</button>" +
+          '<div class="hbody"><span class="hname">' + esc(h.name) + '</span><div class="hsub">' +
+          (h.who ? '<button class="who" data-quote="' + esc(h.id) + '" aria-expanded="' + open + '">' + esc(h.who) + (h.quote ? (open ? " ↑" : " ↓") : "") + "</button>" : "") +
+          (lib && lib.go ? '<button class="link" style="font-size:13px" data-go="' + lib.go + '">' + (lib.go === "gastos" ? "Abrir registro" : "Ver guía") + " →</button>" : "") +
+          "</div>" + (h.quote && open ? '<p class="quote">' + esc(h.quote) + "</p>" : "") + "</div>" +
+          '<span class="streak num' + (st >= 3 ? " hot" : "") + '">' + st + (st === 1 ? " día" : " días") + "</span></div>";
+      }
+      gh += "</div>";
+    }
+    $("groups").innerHTML = gh;
+
+    // Goals
     const preds = periodPreds();
     let gl = "";
     for (const cat of cats) {
       const list = hs.filter(h => h.cat === cat);
       if (!list.length) continue;
-      gl += '<div class="gcat"><h3>' + CATS[cat] + '</h3><p class="why">' + CAT_WHY[cat] + '</p><div class="ledger"><div class="lrow head"><span>Hábito</span>' + PERIODS.map(p => "<span>" + p[0] + "</span>").join("") + "</div>";
+      gl += '<div style="display:flex;flex-direction:column;gap:10px"><h3>' + CATS[cat] + '</h3><p class="muted">' + CAT_WHY[cat] + '</p><div class="ledger"><div class="lrow head"><span class="label">Hábito</span>' + PERIODS.map(p => '<span class="label">' + p[0] + "</span>").join("") + "</div>";
       for (const h of list) {
         gl += '<div class="lrow"><span class="lname">' + esc(h.name) + "</span>";
         PERIODS.forEach((p, i) => {
-          const goal = amount(h, p[1]);
-          const got = countChecks(h.id, preds[i][1]);
-          const gotTxt = i === 0 ? (got ? "hecho hoy" : "pendiente hoy") : "llevas " + amount(h, got).main + " " + preds[i][0];
-          gl += '<div class="cell"><span class="mlabel">' + p[0] + '</span><span class="meta num">' + esc(goal.main) + "</span>" +
-            (goal.sub ? '<span class="sub">' + esc(goal.sub) + "</span>" : "") + '<span class="got num">' + esc(gotTxt) + "</span></div>";
+          const goal = amount(h, p[1]), got = countChecks(h.id, preds[i][1]);
+          const g = i === 0 ? (got ? "hecho" : "pendiente") : "llevas " + amount(h, got).main;
+          gl += '<div class="cell"><span class="ml">' + p[0] + '</span><span class="v num">' + esc(goal.main) + "</span>" + (goal.sub ? '<span class="s">' + esc(goal.sub) + "</span>" : "") + '<span class="g num">' + esc(g) + "</span></div>";
         });
         gl += "</div>";
       }
@@ -652,36 +767,109 @@ footer { font-size: 12px; color: var(--muted); border-top: 1px solid var(--line)
     }
     $("goals").innerHTML = gl || '<p class="empty">Agrega hábitos para ver sus metas.</p>';
 
-    // Heatmap (all habits)
-    const all = state.habits, weeks = 16;
-    const lastSat = addDays(t, 6 - t.getDay()), first = addDays(lastSat, -(weeks * 7 - 1));
-    let hh = "";
-    for (let i = 0; i < weeks * 7; i++) {
-      const d = addDays(first, i);
-      if (d > t) { hh += '<i class="future"></i>'; continue; }
-      const r = dayRatio(d, all);
-      const lvl = r === 0 ? 0 : r < 0.25 ? 1 : r < 0.5 ? 2 : r < 0.8 ? 3 : 4;
-      hh += '<i class="l' + lvl + '" title="' + d.getDate() + " " + MONTHS[d.getMonth()] + ": " + Math.round(r * 100) + '%"></i>';
-    }
-    $("heat").innerHTML = hh;
-
-    // Editor
-    $("editor").hidden = !editing;
-    $("toggleEdit").textContent = editing ? "Listo" : "Editar lista";
-    if (editing) {
-      const have = new Set(state.habits.map(h => h.id));
-      const missing = LIBRARY.filter(h => !have.has(h.id));
-      $("suggestBox").hidden = !missing.length;
-      $("suggest").innerHTML = missing.map(h => '<button class="chip" data-add="' + h.id + '">+ ' + esc(h.name) + "</button>").join("");
-      $("elist").innerHTML = state.habits.map(h =>
-        '<div class="erow"><span>' + esc(h.name) + " <small>· " + CATS[h.cat] + "</small></span>" +
-        (pendingDelete === h.id
-          ? '<span style="display:flex;gap:6px"><button class="btn ghost" data-cancel="1">Cancelar</button><button class="btn danger" data-confirm="' + esc(h.id) + '">Quitar</button></span>'
-          : '<button class="btn ghost" data-del="' + esc(h.id) + '">Quitar</button>') + "</div>").join("");
+    if (tab === "rutina") {
+      const all = state.habits, weeks = 16, lastSat = addDays(t, 6 - t.getDay()), first = addDays(lastSat, -(weeks * 7 - 1));
+      let hh = "";
+      for (let i = 0; i < weeks * 7; i++) {
+        const d = addDays(first, i);
+        if (d > t) { hh += '<i class="future"></i>'; continue; }
+        const r = dayRatio(d, all), l = r === 0 ? 0 : r < .25 ? 1 : r < .5 ? 2 : r < .8 ? 3 : 4;
+        hh += '<i class="l' + l + '" title="' + d.getDate() + " " + MONTHS[d.getMonth()] + ": " + Math.round(r * 100) + '%"></i>';
+      }
+      $("heat").innerHTML = hh;
     }
   }
 
+  function renderGastos(dayKey, isToday) {
+    if (!$("expCat").options.length) $("expCat").innerHTML = EXP_CATS.map(c => "<option>" + esc(c) + "</option>").join("");
+    document.querySelectorAll("[data-kind]").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.kind === expKind)));
+    $("expDayTitle").textContent = isToday ? "Gastos de hoy" : "Gastos del " + selected.getDate() + " de " + MONTHS[selected.getMonth()];
+    $("noSpend").textContent = isToday ? "Hoy no gasté nada" : "Este día no gasté nada";
+    const items = expOn(dayKey);
+    $("noSpend").hidden = items.length > 0 || doneOn(dayKey).has("ledger");
+    $("expList").innerHTML = items.length ? items.map(e =>
+      '<div class="item"><div class="what"><span>' + esc(e.note || e.cat) + '</span><span class="tag' + (e.kind === "want" ? " want" : "") + '">' + esc(e.note ? e.cat + " · " : "") + (e.kind === "want" ? "Deseo" : "Necesidad") + '</span></div><span class="amt num">' + money(e.amt) + '</span><button class="x" data-delexp="' + esc(e.id) + '" aria-label="Borrar ' + esc(e.note || e.cat) + '">×</button></div>').join("")
+      : '<p class="empty">' + (doneOn(dayKey).has("ledger") ? "Día sin gastos. Bien hecho." : "Nada registrado todavía.") + "</p>";
+    $("expDayTotal").textContent = money(sum(items));
+
+    // Month of the selected day
+    const y = selected.getFullYear(), m = selected.getMonth(), ym = y + "-" + pad(m + 1);
+    const monthItems = state.expenses.filter(e => e.d.startsWith(ym));
+    const total = sum(monthItems);
+    const t = today();
+    const elapsed = (y === t.getFullYear() && m === t.getMonth()) ? t.getDate() : new Date(y, m + 1, 0).getDate();
+    const regDays = new Set([...monthItems.map(e => e.d), ...Object.keys(state.log).filter(k => k.startsWith(ym) && state.log[k].includes("ledger"))]).size;
+    $("expMonthTitle").innerHTML = "<em>" + MONTHS[m].replace(/^./, c => c.toUpperCase()) + "</em> " + y;
+    $("mTotal").textContent = money(total, true);
+    $("mAvg").textContent = money(total / Math.max(1, elapsed), true);
+    $("mDays").textContent = regDays + " / " + elapsed;
+    const need = sum(monthItems.filter(e => e.kind === "need")), want = total - need;
+    const [iN, iW] = $("mSplit").children;
+    iN.style.width = (total ? need / total * 100 : 0) + "%"; iW.style.width = (total ? want / total * 100 : 0) + "%";
+    $("mSplitLegend").innerHTML = '<span><i style="background:var(--ink)"></i>Necesidades ' + money(need) + (total ? " · " + Math.round(need / total * 100) + "%" : "") + '</span><span><i style="background:var(--soft)"></i>Deseos ' + money(want) + (total ? " · " + Math.round(want / total * 100) + "%" : "") + "</span>";
+    const byCat = {};
+    monthItems.forEach(e => { byCat[e.cat] = (byCat[e.cat] || 0) + e.amt; });
+    const rows = Object.entries(byCat).sort((a, b) => b[1] - a[1]);
+    const max = rows.length ? rows[0][1] : 1;
+    $("mCats").innerHTML = rows.length ? rows.map(([c, v]) => '<div class="crow"><span>' + esc(c) + '</span><div class="cb" aria-hidden="true"><i style="width:' + (v / max * 100) + '%"></i></div><span class="ca num">' + money(v) + ' <span class="muted" style="font-family:var(--sans);font-size:12px">' + Math.round(v / total * 100) + "%</span></span></div>").join("")
+      : '<p class="empty">Cuando registres gastos verás aquí en qué se va tu dinero.</p>';
+  }
+
+  function renderIngreso(dayKey, isToday) {
+    const sd = state.side;
+    $("paths").innerHTML = PATHS.map((p, i) => {
+      const on = sd.path === p.id, open = openPath === p.id;
+      return '<div class="path' + (on ? " on" : "") + '"><button data-path="' + p.id + '" aria-expanded="' + open + '"><span class="pn num">' + pad(i + 1) + '</span><span class="pt">' + esc(p.t) + '<span class="pl">' + esc(p.l) + '</span></span><span class="pick">' + (on ? "Tu camino" : (open ? "↑" : "↓")) + "</span></button>" +
+        (open ? '<div class="pdetail"><div><span class="label">Primer paso</span><p>' + esc(p.start) + '</p></div><div><span class="label">Cómo cobrar</span><p>' + esc(p.price) + '</p></div><div><span class="label">Dónde</span><p>' + esc(p.where) + '</p></div><div><span class="label">Por qué funciona</span><p>' + esc(p.tip) + "</p></div>" +
+          '<div style="grid-column:1/-1">' + (on ? '<button class="btn line" data-choose="">Cambiar de camino</button>' : '<button class="btn" data-choose="' + p.id + '">Elegir este camino</button>') + "</div></div>" : "") + "</div>";
+    }).join("");
+
+    const dow = today().getDay();
+    $("rhythm").innerHTML = RHYTHM.map(([d, v, p]) => '<div class="rrow' + (d === dow ? " now" : "") + '"><span class="rd">' + DAY_LONG[d] + '</span><span class="rv">' + v + "</span><p>" + p + "</p></div>").join("");
+
+    let total = 0, doneN = 0;
+    $("phases").innerHTML = PHASES.map(ph => {
+      total += ph.ms.length;
+      const d = ph.ms.filter(m => sd.milestones[m[0]]).length; doneN += d;
+      return '<div class="phase"><h3><span>' + ph.h + ' <em class="muted" style="font-size:18px">' + ph.t + '</em></span><span class="label num">' + d + "/" + ph.ms.length + "</span></h3>" +
+        ph.ms.map(m => '<button class="ms' + (sd.milestones[m[0]] ? " done" : "") + '" data-ms="' + m[0] + '" role="checkbox" aria-checked="' + !!sd.milestones[m[0]] + '"><span class="check">' + CHECK_SVG + "</span><span>" + esc(m[1]) + "</span></button>").join("") + "</div>";
+    }).join("");
+    $("msCount").textContent = doneN + " / " + total;
+
+    $("logDate").textContent = isToday ? "Hoy" : selected.getDate() + " de " + MONTHS[selected.getMonth()];
+    if (document.activeElement !== $("sessNote")) $("sessNote").value = sd.notes[dayKey] || "";
+    const past = Object.entries(sd.notes).filter(([k]) => k !== dayKey).sort((a, b) => b[0] < a[0] ? -1 : 1).slice(0, 8);
+    $("notes").innerHTML = past.map(([k, v]) => { const d = parseKey(k); return '<div class="note"><span class="label">' + d.getDate() + " " + MONTHS[d.getMonth()].slice(0, 3) + "</span><p>" + esc(v) + "</p></div>"; }).join("");
+
+    const ym = keyOf(today()).slice(0, 7);
+    $("iMonth").textContent = money(sum(sd.income.filter(e => e.d.startsWith(ym))), true);
+    $("iTotal").textContent = money(sum(sd.income), true);
+    $("iCount").textContent = sd.income.length;
+    const inc = [...sd.income].sort((a, b) => b.d < a.d ? -1 : 1).slice(0, 12);
+    $("incList").innerHTML = inc.length ? inc.map(e => { const d = parseKey(e.d); return '<div class="item"><div class="what"><span>' + esc(e.note || "Venta") + '</span><span class="tag">' + d.getDate() + " de " + MONTHS[d.getMonth()] + '</span></div><span class="amt num">' + money(e.amt) + '</span><button class="x" data-delinc="' + esc(e.id) + '" aria-label="Borrar ingreso">×</button></div>'; }).join("")
+      : '<p class="empty"><span class="hand" style="font-size:28px;font-style:normal">tu primera venta irá aquí</span></p>';
+  }
+
+  function renderEditor() {
+    $("editor").hidden = !editing;
+    $("toggleEdit").textContent = editing ? "Listo" : "Editar lista";
+    if (!editing) return;
+    const have = new Set(state.habits.map(h => h.id));
+    const missing = LIBRARY.filter(h => !have.has(h.id));
+    $("suggestBox").hidden = !missing.length;
+    $("suggest").innerHTML = missing.map(h => '<button class="chip" data-add="' + h.id + '">+ ' + esc(h.name) + "</button>").join("");
+    $("elist").innerHTML = state.habits.map(h => '<div class="erow"><span>' + esc(h.name) + ' <span class="muted" style="font-size:12px">· ' + CATS[h.cat] + "</span></span>" +
+      (pendingDelete === h.id ? '<span style="display:flex;gap:6px"><button class="btn line" data-cancel="1">Cancelar</button><button class="btn" data-confirm="' + esc(h.id) + '">Quitar</button></span>'
+        : '<button class="link" data-del="' + esc(h.id) + '">Quitar</button>') + "</div>").join("");
+  }
+
   // ---------- Events ----------
+  function setTab(t) {
+    tab = t;
+    try { history.replaceState(null, "", "#" + t); } catch (e) {}
+    render();
+    window.scrollTo({ top: 0, behavior: "instant" in window ? "instant" : "auto" });
+  }
   document.addEventListener("click", e => {
     const b = e.target.closest("button");
     if (!b) return;
@@ -691,39 +879,62 @@ footer { font-size: 12px; color: var(--muted); border-top: 1px solid var(--line)
       s.has(d.toggle) ? s.delete(d.toggle) : s.add(d.toggle);
       if (s.size) state.log[k] = [...s]; else delete state.log[k];
       persist(); render();
-      const again = document.querySelector('[data-toggle="' + CSS.escape(d.toggle) + '"]');
-      if (again) again.focus();
-    } else if (d.tab) {
-      tab = d.tab;
-      try { history.replaceState(null, "", "#" + tab); } catch (err) { location.hash = tab; }
-      render();
-    } else if (d.quote) {
-      openQuotes.has(d.quote) ? openQuotes.delete(d.quote) : openQuotes.add(d.quote); render();
-    } else if (d.day) {
-      const [y, m, dd] = d.day.split("-").map(Number); selected = new Date(y, m - 1, dd); render();
-    } else if (b.id === "prevWeek") { selected = addDays(selected, -7); render(); }
+      const again = document.querySelector('[data-toggle="' + CSS.escape(d.toggle) + '"]'); if (again) again.focus();
+    } else if (d.tab) setTab(d.tab);
+    else if (d.go) setTab(d.go);
+    else if (d.quote) { openQuotes.has(d.quote) ? openQuotes.delete(d.quote) : openQuotes.add(d.quote); render(); }
+    else if (d.day) { selected = parseKey(d.day); render(); }
+    else if (b.id === "prevWeek") { selected = addDays(selected, -7); render(); }
     else if (b.id === "nextWeek") { selected = addDays(selected, 7); if (selected > today()) selected = today(); render(); }
     else if (b.id === "goToday") { selected = today(); render(); }
     else if (b.id === "toggleEdit") { editing = !editing; pendingDelete = null; render(); }
+    else if (b.id === "noSpend") { markDone("ledger", keyOf(selected)); persist(); render(); }
+    else if (d.kind) { expKind = d.kind; render(); }
+    else if (d.delexp) { state.expenses = state.expenses.filter(x => x.id !== d.delexp); persist(); render(); }
+    else if (d.delinc) { state.side.income = state.side.income.filter(x => x.id !== d.delinc); persist(); render(); }
+    else if (d.path) { openPath = openPath === d.path ? null : d.path; render(); }
+    else if (d.choose !== undefined) { state.side.path = d.choose || null; if (d.choose) state.side.milestones.p1 = true; openPath = d.choose || openPath; persist(); render(); }
+    else if (d.ms) { const m = state.side.milestones; if (m[d.ms]) delete m[d.ms]; else m[d.ms] = true; persist(); render(); }
     else if (d.add) { const h = LIB[d.add]; if (h) { state.habits.push(fromLib(h)); persist(); render(); } }
     else if (d.del) { pendingDelete = d.del; render(); }
     else if (d.cancel) { pendingDelete = null; render(); }
     else if (d.confirm) { state.habits = state.habits.filter(h => h.id !== d.confirm); pendingDelete = null; persist(); render(); }
   });
-  window.addEventListener("hashchange", () => {
-    const t2 = location.hash === "#finanzas" ? "finanzas" : "rutina";
-    if (t2 !== tab) { tab = t2; render(); }
-  });
+  window.addEventListener("hashchange", () => { const t2 = hashTab(); if (t2 !== tab) { tab = t2; render(); } });
 
-  $("addForm").addEventListener("submit", e => {
+  $("expForm").addEventListener("submit", e => {
     e.preventDefault();
-    const name = $("newName").value.trim();
-    if (!name) return;
-    state.habits.push({ id: "c" + Date.now().toString(36), name: name.slice(0, 80), cat: $("newCat").value, who: "", quote: "" });
-    $("newName").value = "";
+    const amt = parseFloat($("expAmt").value);
+    if (!Number.isFinite(amt) || amt <= 0) { $("expAmt").focus(); return; }
+    const k = keyOf(selected);
+    state.expenses.push({ id: uid(), d: k, amt, cat: $("expCat").value, kind: expKind, note: $("expNote").value.trim().slice(0, 80) });
+    markDone("ledger", k);
+    $("expAmt").value = ""; $("expNote").value = "";
+    persist(); render(); $("expAmt").focus();
+  });
+  $("incForm").addEventListener("submit", e => {
+    e.preventDefault();
+    const amt = parseFloat($("incAmt").value);
+    if (!Number.isFinite(amt) || amt <= 0) { $("incAmt").focus(); return; }
+    state.side.income.push({ id: uid(), d: keyOf(selected), amt, note: $("incNote").value.trim().slice(0, 80) });
+    $("incAmt").value = ""; $("incNote").value = "";
     persist(); render();
   });
-
+  let noteTimer = null;
+  $("sessNote").addEventListener("input", () => {
+    const k = keyOf(selected), v = $("sessNote").value.slice(0, 500);
+    if (v.trim()) { state.side.notes[k] = v; markDone("side", k); } else delete state.side.notes[k];
+    $("sessSaved").textContent = "Guardando…";
+    clearTimeout(noteTimer);
+    noteTimer = setTimeout(() => { persist(); $("sessSaved").textContent = v.trim() ? "Guardado. Sesión marcada como hecha." : ""; }, 500);
+  });
+  $("sessNote").addEventListener("blur", () => render());
+  $("addForm").addEventListener("submit", e => {
+    e.preventDefault();
+    const name = $("newName").value.trim(); if (!name) return;
+    state.habits.push({ id: "c" + uid(), name: name.slice(0, 80), cat: $("newCat").value, who: "", quote: "" });
+    $("newName").value = ""; persist(); render();
+  });
   function onSetting() {
     const daily = parseFloat($("finDaily").value), rate = parseFloat($("finRate").value);
     if (Number.isFinite(daily) && daily >= 0) state.settings.daily = daily;
@@ -736,10 +947,7 @@ footer { font-size: 12px; color: var(--muted); border-top: 1px solid var(--line)
   $("finCur").addEventListener("change", onSetting);
 
   let lastDay = keyOf(today());
-  setInterval(() => {
-    const k = keyOf(today());
-    if (k !== lastDay) { if (keyOf(selected) === lastDay) selected = today(); lastDay = k; render(); }
-  }, 60000);
+  setInterval(() => { const k = keyOf(today()); if (k !== lastDay) { if (keyOf(selected) === lastDay) selected = today(); lastDay = k; render(); } }, 60000);
 
   render();
 })();

@@ -1,11 +1,10 @@
 # Hábitos Compuestos
 
-Habit tracker de una sola página (`index.html`) con el estilo del moodboard de Paola Lozano Studio. Tiene dos secciones: **Rutina de éxito** (Buffett, Gates, Bezos, Oprah, Dalio, Branson) y **Finanzas personales** (Rockefeller, Munger, Clason, Kiyosaki, Buffett).
+Habit tracker de una sola página (`index.html`), con diseño editorial y minimalista sobre la paleta de Paola Lozano Studio.
 
-- 17 hábitos sugeridos: Mañana, Durante el día, Noche y Finanzas, cada uno con su referencia.
-- Metas por categoría: lo que suma cada hábito en un día, mes, trimestre y año, y lo que llevas de verdad.
-- Ahorro diario configurable (monto, moneda, rendimiento) con proyección de interés compuesto a 1, 5, 10 y 20 años.
-- Rachas por hábito, porcentaje del día, promedio de 7 días y mapa de las últimas 16 semanas.
-- Puedes marcar días anteriores, agregar hábitos propios y quitar los que no uses.
+- **Rutina:** hábitos de Mañana, Durante el día y Noche (Buffett, Gates, Bezos, Oprah, Dalio, Branson), con metas diaria, mensual, trimestral y anual.
+- **Finanzas:** hábitos de dinero (Rockefeller, Munger, Clason, Kiyosaki, Buffett) y proyección de ahorro con interés compuesto.
+- **Gastos:** registro diario de gastos por categoría, necesidad o deseo, y resumen del mes. Registrar un gasto (o "hoy no gasté nada") marca el hábito del día.
+- **Ingreso extra:** seis caminos para empezar, ritmo semanal para los 30 minutos, ruta de 90 días, bitácora de sesiones y registro de ingresos.
 
-Ábrelo en el navegador. Si se usa como Artifact de claude.ai, el progreso se guarda en tu cuenta; si no, en el `localStorage` del navegador.
+Como Artifact de claude.ai, los datos se guardan en tu cuenta; abierto como archivo, en el `localStorage` del navegador.
