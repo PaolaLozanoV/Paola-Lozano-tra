@@ -1,8 +1,10 @@
 # Hábitos Compuestos
 
-Habit tracker de una sola página (`index.html`) para marcar tus hábitos cada día, basado en las rutinas públicas de personas como Warren Buffett, Bill Gates, Jeff Bezos, Oprah Winfrey, Ray Dalio y Richard Branson.
+Habit tracker de una sola página (`index.html`) con el estilo del moodboard de Paola Lozano Studio. Tiene dos secciones: **Rutina de éxito** (Buffett, Gates, Bezos, Oprah, Dalio, Branson) y **Finanzas personales** (Rockefeller, Munger, Clason, Kiyosaki, Buffett).
 
-- 12 hábitos sugeridos agrupados en Mañana, Durante el día y Noche, cada uno con su referencia.
+- 17 hábitos sugeridos: Mañana, Durante el día, Noche y Finanzas, cada uno con su referencia.
+- Metas por categoría: lo que suma cada hábito en un día, mes, trimestre y año, y lo que llevas de verdad.
+- Ahorro diario configurable (monto, moneda, rendimiento) con proyección de interés compuesto a 1, 5, 10 y 20 años.
 - Rachas por hábito, porcentaje del día, promedio de 7 días y mapa de las últimas 16 semanas.
 - Puedes marcar días anteriores, agregar hábitos propios y quitar los que no uses.
 
